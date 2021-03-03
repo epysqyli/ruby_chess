@@ -43,19 +43,21 @@ class ChessBoard
   end
 
   def create_board
+    # white pieces first row
+    @board << Square.new(1, 1, state = ChessBoard.white_pieces[:rook])
+    @board << Square.new(8, 1, state = ChessBoard.white_pieces[:rook])
+    @board << Square.new(2, 1, state = ChessBoard.white_pieces[:knight])
+    @board << Square.new(7, 1, state = ChessBoard.white_pieces[:knight])
+    @board << Square.new(3, 1, state = ChessBoard.white_pieces[:bishop])
+    @board << Square.new(6, 1, state = ChessBoard.white_pieces[:bishop])
+    @board << Square.new(4, 1, state = ChessBoard.white_pieces[:queen])
+    @board << Square.new(5, 1, state = ChessBoard.white_pieces[:king])
+
     # white pawns creation
     x = 1
     y = 2
     while x < 9
       @board << Square.new(x, y, state = ChessBoard.white_pieces[:pawn])
-      x += 1
-    end
-
-    # black pawns creation
-    x = 1
-    y = 7
-    while x < 9
-      @board << Square.new(x, y, state = ChessBoard.black_pieces[:pawn])
       x += 1
     end
 
@@ -71,15 +73,13 @@ class ChessBoard
       y += 1
     end
 
-    # white pieces first row
-    @board << Square.new(1, 1, state = ChessBoard.white_pieces[:rook])
-    @board << Square.new(8, 1, state = ChessBoard.white_pieces[:rook])
-    @board << Square.new(2, 1, state = ChessBoard.white_pieces[:knight])
-    @board << Square.new(7, 1, state = ChessBoard.white_pieces[:knight])
-    @board << Square.new(3, 1, state = ChessBoard.white_pieces[:bishop])
-    @board << Square.new(6, 1, state = ChessBoard.white_pieces[:bishop])
-    @board << Square.new(4, 1, state = ChessBoard.white_pieces[:queen])
-    @board << Square.new(5, 1, state = ChessBoard.white_pieces[:king])
+    # black pawns creation
+    x = 1
+    y = 7
+    while x < 9
+      @board << Square.new(x, y, state = ChessBoard.black_pieces[:pawn])
+      x += 1
+    end
 
     # black pieces first row
     @board << Square.new(1, 8, state = ChessBoard.black_pieces[:rook])
