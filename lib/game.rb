@@ -43,4 +43,29 @@ class Game
     puts "\t| #{@board[0].state} | #{@board[1].state} | #{@board[2].state} | #{@board[3].state} | #{@board[4].state} | #{@board[5].state} | #{@board[6].state} | #{@board[7].state} |"
     puts "\n"
   end
+  
+  def move(x1, y1, x2, y2)
+    empty = " "
+
+    # choose initial square
+    start = @board.detect do |square|
+      [square.x, square.y] == [x1, y1]
+    end
+    p start
+
+    # choose final square
+    finish = @board.detect do |square|
+      [square.x, square.y] == [x2, y2]
+    end
+    p finish
+
+    piece = start.state
+    start.state = empty
+    finish.state = piece
+  end
 end
+
+game = Game.new
+game.display_board
+game.move(2, 2, 2, 3)
+game.display_board
