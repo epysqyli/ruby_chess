@@ -6,6 +6,8 @@ class Game
 
   def initialize
     @board = ChessBoard.new.board
+    @white = Player.new('white')
+    @black = Player.new('black')
   end
 
   def display_board
@@ -42,6 +44,3 @@ class Game
     puts "\n"
   end
 end
-
-game = Game.new
-game.display_board

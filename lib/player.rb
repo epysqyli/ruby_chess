@@ -1,6 +1,9 @@
 require_relative 'board.rb'
 
 class Player
-  def initialize
+  attr_reader :color
+
+  def initialize(color)
+    @color = color
   end
 end
