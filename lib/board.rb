@@ -1,5 +1,5 @@
 # black and white unicodes used in opposite way due to final display qualities
-# apply encode. Example: puts black_pieces[:king].encode. Maybe add encode function later
+# puts black_pieces[:king].encode. Maybe add encode function later
 
 class Square
   attr_reader :x, :y
@@ -45,13 +45,13 @@ class ChessBoard
   def create_board
     # white pieces first row
     @board << Square.new(1, 1, state = ChessBoard.white_pieces[:rook])
-    @board << Square.new(8, 1, state = ChessBoard.white_pieces[:rook])
     @board << Square.new(2, 1, state = ChessBoard.white_pieces[:knight])
-    @board << Square.new(7, 1, state = ChessBoard.white_pieces[:knight])
     @board << Square.new(3, 1, state = ChessBoard.white_pieces[:bishop])
-    @board << Square.new(6, 1, state = ChessBoard.white_pieces[:bishop])
     @board << Square.new(4, 1, state = ChessBoard.white_pieces[:queen])
     @board << Square.new(5, 1, state = ChessBoard.white_pieces[:king])
+    @board << Square.new(6, 1, state = ChessBoard.white_pieces[:bishop])
+    @board << Square.new(7, 1, state = ChessBoard.white_pieces[:knight])
+    @board << Square.new(8, 1, state = ChessBoard.white_pieces[:rook])
 
     # white pawns creation
     x = 1
@@ -83,12 +83,13 @@ class ChessBoard
 
     # black pieces first row
     @board << Square.new(1, 8, state = ChessBoard.black_pieces[:rook])
-    @board << Square.new(8, 8, state = ChessBoard.black_pieces[:rook])
     @board << Square.new(2, 8, state = ChessBoard.black_pieces[:knight])
-    @board << Square.new(7, 8, state = ChessBoard.black_pieces[:knight])
     @board << Square.new(3, 8, state = ChessBoard.black_pieces[:bishop])
-    @board << Square.new(6, 8, state = ChessBoard.black_pieces[:bishop])
     @board << Square.new(4, 8, state = ChessBoard.black_pieces[:queen])
     @board << Square.new(5, 8, state = ChessBoard.black_pieces[:king])
+    @board << Square.new(6, 8, state = ChessBoard.black_pieces[:bishop])
+    @board << Square.new(7, 8, state = ChessBoard.black_pieces[:knight])
+    @board << Square.new(8, 8, state = ChessBoard.black_pieces[:rook])
   end
+
 end
