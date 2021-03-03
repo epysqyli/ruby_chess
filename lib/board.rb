@@ -5,7 +5,7 @@ class Square
   attr_reader :x, :y
   attr_accessor :state
 
-  def initialize(x, y, state = '')
+  def initialize(x, y, state = ' ')
     @x = x
     @y = y
     @state = state
