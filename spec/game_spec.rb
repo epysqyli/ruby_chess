@@ -33,14 +33,13 @@ describe Game do
     end
   end
 
-  describe "#identify_piece" do
+  describe "#detect_piece" do
     subject(:game_piece) { described_class.new }
 
     context 'when selecting a square' do
-      xit 'returns the piece type found in the square' do
+      it 'returns the piece type found in the square' do
         board = game_piece.instance_variable_get(:@board)
-        pos = board.detect { |square| [square.x, square.y] == [4, 1] }
-        expect(game_piece.identify_piece(pos)).to eq('knight')
+        expect(game_piece.detect_piece(2, 1)).to eq('knight')
       end
     end
   end

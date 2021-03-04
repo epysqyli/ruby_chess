@@ -44,37 +44,33 @@ class Game
     puts "\n"
   end
 
-  def identify_piece(pos)
-    # identifies the piece based on the pos.state
-    piece = ' '
-    if pos.state == (ChessBoard.black_pieces[:king] || ChessBoard.white_pieces[:king])
-      piece = 'king'
-    elsif pos.state == (ChessBoard.black_pieces[:queen] || ChessBoard.white_pieces[:queen])
-      piece = 'queen'
-    elsif pos.state == (ChessBoard.black_pieces[:bishop] || ChessBoard.white_pieces[:bishop])
-      piece = 'bishop'
-    elsif pos.state == (ChessBoard.black_pieces[:knight] || ChessBoard.white_pieces[:knight])
-      piece = 'knight'
-    elsif pos.state == (ChessBoard.black_pieces[:rook] || ChessBoard.white_pieces[:rook])
-      piece = 'rook'
-    elsif pos.state == (ChessBoard.black_pieces[:pawn] || ChessBoard.white_pieces[:pawn])
-      piece = 'pawn'
+  def detect_piece(x, y)
+    pos = detect_square(x, y)
+    if pos.state == ChessBoard.black_pieces[:king] || pos.state == ChessBoard.white_pieces[:king]
+      'king'
+    elsif pos.state == ChessBoard.black_pieces[:queen] || pos.state == ChessBoard.white_pieces[:queen]
+      'queen'
+    elsif pos.state == ChessBoard.black_pieces[:bishop] || pos.state == ChessBoard.white_pieces[:bishop]
+      'bishop'
+    elsif pos.state == ChessBoard.black_pieces[:knight] || pos.state == ChessBoard.white_pieces[:knight]
+      'knight'
+    elsif pos.state == ChessBoard.black_pieces[:rook] || pos.state == ChessBoard.white_pieces[:rook]
+      'rook'
+    elsif pos.state == ChessBoard.black_pieces[:pawn] || pos.state == ChessBoard.white_pieces[:pawn]
+      'pawn'
+    else
+      ' '
     end
-    piece
   end
 
-  #def check_constraints
+  # def check_constraints
 
   def detect_square(x, y)
-    square = @board.detect { |s| [s.x, s.y] == [x, y] }
-    return square
+    @board.detect { |s| [s.x, s.y] == [x, y] }
   end
 
   def make_move(x1, y1, x2, y2)
-    # choose initial square
     start = detect_square(x1, y1)
-
-    # choose final square
     finish = detect_square(x2, y2)
 
     empty = ' '
