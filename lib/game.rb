@@ -71,19 +71,13 @@ class Game
   end
 
   def make_move(x1, y1, x2, y2)
-    empty = ' '
-
     # choose initial square
-    start = @board.detect do |square|
-      [square.x, square.y] == [x1, y1]
-    end
+    start = detect_square(x1, y1)
 
     # choose final square
-    finish = @board.detect do |square|
-      [square.x, square.y] == [x2, y2]
-    end
+    finish = detect_square(x2, y2)
 
-    # can be its own method
+    empty = ' '
     piece = start.state
     start.state = empty
     finish.state = piece
@@ -92,5 +86,5 @@ end
 
 # game = Game.new
 # game.display_board
-# game.move(2, 2, 2, 3)
+# game.make_move(2, 2, 2, 3)
 # game.display_board
