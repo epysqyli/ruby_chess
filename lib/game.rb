@@ -114,6 +114,16 @@ class Game
       end
     end
   end
+  
+  def check_bishop_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'bishop'
+      if (x2 - x1).abs == (y2 - y1).abs
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
+  end
 
   def make_move(x1, y1, x2, y2)
     start = detect_square(x1, y1)

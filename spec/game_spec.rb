@@ -67,5 +67,12 @@ describe Game do
         expect(output).to eq('Invalid move for the type')
       end
     end
+
+    context 'when moving a bishop' do
+      it 'gives an error message if the move is not allowed' do
+        output = game_move.check_bishop_move(3, 1, 6, 5)
+        expect(output).to eq('Invalid move for the type')
+      end
+    end
   end
 end
