@@ -93,5 +93,3 @@ class ChessBoard
   end
 
 end
-
-p ChessBoard.white_pieces[:king]
