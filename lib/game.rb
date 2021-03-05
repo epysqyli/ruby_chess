@@ -44,6 +44,10 @@ class Game
     puts "\n"
   end
 
+  def detect_square(x, y)
+    @board.detect { |s| [s.x, s.y] == [x, y] }
+  end
+
   def detect_piece(x, y)
     pos = detect_square(x, y)
     if pos.state == ChessBoard.black_pieces[:king] || pos.state == ChessBoard.white_pieces[:king]
@@ -63,10 +67,16 @@ class Game
     end
   end
 
-  # def check_constraints
-
-  def detect_square(x, y)
-    @board.detect { |s| [s.x, s.y] == [x, y] }
+  def check_pawn_move(x, y, a, b)
+    if detect_piece(x, y) == 'pawn'
+      if b - y == 1
+        'the move is allowed'
+      elsif b - y == 2 && y == 2
+        'the move is allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
   end
 
   def make_move(x1, y1, x2, y2)
