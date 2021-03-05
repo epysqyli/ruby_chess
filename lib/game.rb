@@ -125,6 +125,34 @@ class Game
     end
   end
 
+  def check_queen_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'queen'
+      if (x2 - x1).abs == (y2 - y1).abs
+        'allowed'
+      elsif x1 == x2
+          'allowed'
+      elsif y1 == y2
+          'allowed'
+      else
+          'Invalid move for the type'
+      end
+    end
+  end
+
+  def check_king_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'king'
+      if (x2 - x1).abs == (y2 - y1).abs && (x2 - x1).abs == 1 
+        'allowed'
+      elsif x1 == x2 && (y2 - y1).abs == 1
+          'allowed'
+      elsif y1 == y2 && (x2 - x1).abs == 1
+          'allowed'
+      else
+          'Invalid move for the type'
+      end
+    end
+  end
+
   def make_move(x1, y1, x2, y2)
     start = detect_square(x1, y1)
     finish = detect_square(x2, y2)
@@ -135,8 +163,3 @@ class Game
     finish.state = piece
   end
 end
-
-# game = Game.new
-# game.display_board
-# game.make_move(2, 2, 2, 3)
-# game.display_board
