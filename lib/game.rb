@@ -67,7 +67,7 @@ class Game
     end
   end
 
-  def check_pawn_move(x1, y1, x2, y2)
+  def check_pawn_move(x1, y1, _x2, y2)
     if detect_piece(x1, y1) == 'pawn'
       if y2 - y1 == 1
         'allowed'
@@ -114,7 +114,7 @@ class Game
       end
     end
   end
-  
+
   def check_bishop_move(x1, y1, x2, y2)
     if detect_piece(x1, y1) == 'bishop'
       if (x2 - x1).abs == (y2 - y1).abs
@@ -130,27 +130,36 @@ class Game
       if (x2 - x1).abs == (y2 - y1).abs
         'allowed'
       elsif x1 == x2
-          'allowed'
+        'allowed'
       elsif y1 == y2
-          'allowed'
+        'allowed'
       else
-          'Invalid move for the type'
+        'Invalid move for the type'
       end
     end
   end
 
   def check_king_move(x1, y1, x2, y2)
     if detect_piece(x1, y1) == 'king'
-      if (x2 - x1).abs == (y2 - y1).abs && (x2 - x1).abs == 1 
+      if (x2 - x1).abs == (y2 - y1).abs && (x2 - x1).abs == 1
         'allowed'
       elsif x1 == x2 && (y2 - y1).abs == 1
-          'allowed'
+        'allowed'
       elsif y1 == y2 && (x2 - x1).abs == 1
-          'allowed'
+        'allowed'
       else
-          'Invalid move for the type'
+        'Invalid move for the type'
       end
     end
+  end
+
+  def check_move(x1, y1, x2, y2)
+    return 'pawn' if check_pawn_move(x1, y1, x2, y2)
+    return 'rook' if check_rook_move(x1, y1, x2, y2)
+    return 'knight' if check_knight_move(x1, y1, x2, y2)
+    return 'bishop' if check_bishop_move(x1, y1, x2, y2)
+    return 'queen' if check_queen_move(x1, y1, x2, y2)
+    return 'king' if check_king_move(x1, y1, x2, y2)
   end
 
   def make_move(x1, y1, x2, y2)
