@@ -67,12 +67,24 @@ class Game
     end
   end
 
-  def check_pawn_move(x, y, a, b)
-    if detect_piece(x, y) == 'pawn'
-      if b - y == 1
-        'the move is allowed'
-      elsif b - y == 2 && y == 2
-        'the move is allowed'
+  def check_pawn_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'pawn'
+      if y2 - y1 == 1
+        'allowed'
+      elsif y2 - y1 == 2 && y1 == 2
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
+  end
+
+  def check_rook_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'rook'
+      if x1 == x2
+        'allowed'
+      elsif y1 == y2
+        'allowed'
       else
         'Invalid move for the type'
       end
