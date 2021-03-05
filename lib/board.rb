@@ -3,9 +3,9 @@
 
 class Square
   attr_reader :x, :y
-  attr_accessor :state
+  attr_accessor :state, :color
 
-  def initialize(x, y, state = ' ')
+  def initialize(x, y, state = ' ', color = ' ')
     @x = x
     @y = y
     @state = state
@@ -47,7 +47,7 @@ class ChessBoard
     # white pieces first row
     @board << Square.new(1, 1, state = ChessBoard.white_pieces[:rook], color = 'white')
     @board << Square.new(2, 1, state = ChessBoard.white_pieces[:knight], color = 'white')
-    @board << Square.new(3, 1, state = ChessBoard.white_pieces[:bishop] color = 'white')
+    @board << Square.new(3, 1, state = ChessBoard.white_pieces[:bishop], color = 'white')
     @board << Square.new(4, 1, state = ChessBoard.white_pieces[:queen], color = 'white')
     @board << Square.new(5, 1, state = ChessBoard.white_pieces[:king], color = 'white')
     @board << Square.new(6, 1, state = ChessBoard.white_pieces[:bishop], color = 'white')

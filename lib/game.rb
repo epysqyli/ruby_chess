@@ -48,6 +48,10 @@ class Game
     @board.detect { |s| [s.x, s.y] == [x, y] }
   end
 
+  def detect_color(x, y)
+    detect_square(x, y).color
+  end
+
   def detect_piece(x, y)
     pos = detect_square(x, y)
     if pos.state == ChessBoard.black_pieces[:king] || pos.state == ChessBoard.white_pieces[:king]

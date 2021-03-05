@@ -1,5 +1,10 @@
 require_relative '../lib/game'
 
+RSpec.configure do |config|
+  config.filter_run_when_matching(focus: true)
+  config.example_status_persistence_file_path = 'spec/example.txt'
+end
+
 describe Game do
   describe "#initialize" do
     subject(:game_start) { described_class.new }
@@ -30,6 +35,20 @@ describe Game do
       square = game_square.detect_square(x, y)
       white_king = "\u265A"
       expect(square.state).to eq(white_king)
+    end
+  end
+
+  describe '#detect_color', :focus => true do
+    subject(:game_color) { described_class.new }
+
+    it 'detects the color white of square [1, 1]' do
+      color = game_color.detect_color(1, 1)
+      expect(color).to eq('white')
+    end
+
+    it 'detects no color on square [4, 4]' do
+      color = game_color.detect_color(4, 4)
+      expect(color).to eq(' ')
     end
   end
 
