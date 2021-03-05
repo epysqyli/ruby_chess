@@ -38,7 +38,7 @@ describe Game do
     end
   end
 
-  describe '#detect_color', :focus => true do
+  describe '#detect_color' do
     subject(:game_color) { described_class.new }
 
     it 'detects the color white of square [1, 1]' do
@@ -126,6 +126,11 @@ describe Game do
       it 'checks the move based on the piece type - knight' do
         output = game_move.check_move(2, 1, 1, 3)
         expect(output).to eq('knight')
+      end
+
+      it 'does not allow a move towards an occupied same player square', :focus => true do
+        output = game_move.check_move(1, 1, 2, 2)
+        expect(output).to eq('same color')
       end
     end
   end

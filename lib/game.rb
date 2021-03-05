@@ -158,12 +158,16 @@ class Game
   end
 
   def check_move(x1, y1, x2, y2)
-    return 'pawn' if check_pawn_move(x1, y1, x2, y2)
-    return 'rook' if check_rook_move(x1, y1, x2, y2)
-    return 'knight' if check_knight_move(x1, y1, x2, y2)
-    return 'bishop' if check_bishop_move(x1, y1, x2, y2)
-    return 'queen' if check_queen_move(x1, y1, x2, y2)
-    return 'king' if check_king_move(x1, y1, x2, y2)
+    if detect_color(x1, y1) != detect_color(x2, y2)
+      return 'pawn' if check_pawn_move(x1, y1, x2, y2)
+      return 'rook' if check_rook_move(x1, y1, x2, y2)
+      return 'knight' if check_knight_move(x1, y1, x2, y2)
+      return 'bishop' if check_bishop_move(x1, y1, x2, y2)
+      return 'queen' if check_queen_move(x1, y1, x2, y2)
+      return 'king' if check_king_move(x1, y1, x2, y2)
+    else
+      'same color'
+    end
   end
 
   def make_move(x1, y1, x2, y2)
