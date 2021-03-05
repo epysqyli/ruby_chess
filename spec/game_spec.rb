@@ -44,7 +44,7 @@ describe Game do
     end
   end
 
-  describe "#check_pawn_move" do
+  describe "#check_piece_move" do
     subject(:game_move) { described_class.new }
 
     context 'when moving a pawn' do
@@ -57,6 +57,13 @@ describe Game do
     context 'when moving a rook' do
       it 'gives an error message if the move is not allowed' do
         output = game_move.check_rook_move(1, 1, 4, 6)
+        expect(output).to eq('Invalid move for the type')
+      end
+    end
+
+    context 'when moving a knight' do
+      it 'gives an error message if the move is not allowed' do
+        output = game_move.check_knight_move(2, 1, 4, 6)
         expect(output).to eq('Invalid move for the type')
       end
     end

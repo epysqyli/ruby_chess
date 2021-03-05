@@ -91,6 +91,30 @@ class Game
     end
   end
 
+  def check_knight_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'knight'
+      if (x2 - x1) == 2 && (y2 - y1) == 1
+        'allowed'
+      elsif (x2 - x1) == 2 && (y2 - y1) == -1
+        'allowed'
+      elsif (x2 - x1) == -2 && (y2 - y1) == 1
+        'allowed'
+      elsif (x2 - x1) == -2 && (y2 - y1) == -1
+        'allowed'
+      elsif (x2 - x1) == 1 && (y2 - y1) == 2
+        'allowed'
+      elsif (x2 - x1) == -1 && (y2 - y1) == 2
+        'allowed'
+      elsif (x2 - x1) == 1 && (y2 - y1) == -2
+        'allowed'
+      elsif (x2 - x1) == -1 && (y2 - y1) == -2
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
+  end
+
   def make_move(x1, y1, x2, y2)
     start = detect_square(x1, y1)
     finish = detect_square(x2, y2)
