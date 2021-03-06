@@ -140,6 +140,12 @@ class Game
     end
   end
 
+  def same_color?(x1, y1, x2, y2)
+    start_color = detect_color(x1, y1)
+    finish_color = detect_color(x2, y2)
+    start_color == finish_color ? true : false
+  end
+
   def check_pawn_move(x1, y1, _x2, y2)
     if detect_piece(x1, y1) == 'pawn'
       if y2 - y1 == 1

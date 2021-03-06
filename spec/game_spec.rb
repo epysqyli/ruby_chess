@@ -95,7 +95,7 @@ describe Game do
     end
   end
 
-  describe '#free_path?', :focus => true do
+  describe '#free_path?' do
     subject (:game_free_path) { described_class.new }
 
     it 'returns true when moving from [2, 2] to [2, 6]' do
@@ -106,6 +106,22 @@ describe Game do
     it 'returns false when moving from [2, 2] to [6, 2]' do
       output = game_free_path.free_path?(2, 2, 6, 2)
       expect(output).to be_falsy
+    end
+  end
+
+  describe '#same_color?' do
+    subject(:game_color_move) { described_class.new }
+
+    context 'checking that the square is not occupied by a same color piece' do
+      it 'returns true if there are same color pieces on both squares' do
+        output = game_color_move.same_color?(1, 1, 2, 2)
+        expect(output).to be_truthy
+      end
+
+      it 'returns false if there are different color pieces on both squares' do
+        output = game_color_move.same_color?(1, 1, 7, 7)
+        expect(output).to be_falsy
+      end
     end
   end
 
