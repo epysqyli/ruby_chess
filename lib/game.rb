@@ -147,10 +147,18 @@ class Game
   end
 
   def check_pawn_move(x1, y1, _x2, y2)
-    if detect_piece(x1, y1) == 'pawn'
+    if detect_piece(x1, y1) == 'pawn' && detect_color(x1, y1) == 'white'
       if y2 - y1 == 1
         'allowed'
       elsif y2 - y1 == 2 && y1 == 2
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    elsif detect_piece(x1, y1) == 'pawn' && detect_color(x1, y1) == 'black'
+      if y1 - y2 == 1
+        'allowed'
+      elsif y1 - y2 == 2 && y1 == 7
         'allowed'
       else
         'Invalid move for the type'
@@ -233,15 +241,18 @@ class Game
   end
 
   def check_move(x1, y1, x2, y2)
-    if detect_color(x1, y1) != detect_color(x2, y2)
-      return 'pawn' if check_pawn_move(x1, y1, x2, y2)
-      return 'rook' if check_rook_move(x1, y1, x2, y2)
-      return 'knight' if check_knight_move(x1, y1, x2, y2)
-      return 'bishop' if check_bishop_move(x1, y1, x2, y2)
-      return 'queen' if check_queen_move(x1, y1, x2, y2)
-      return 'king' if check_king_move(x1, y1, x2, y2)
-    else
-      'same color'
+    if check_pawn_move(x1, y1, x2, y2)
+      return 'pawn'
+    elsif check_rook_move(x1, y1, x2, y2)
+      return 'rook'
+    elsif check_knight_move(x1, y1, x2, y2)
+      return 'knight'
+    elsif check_bishop_move(x1, y1, x2, y2)
+      return 'bishop'
+    elsif check_queen_move(x1, y1, x2, y2)
+      return 'queen'
+    elsif check_king_move(x1, y1, x2, y2)
+      return 'king'
     end
   end
 

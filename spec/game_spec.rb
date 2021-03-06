@@ -125,13 +125,28 @@ describe Game do
     end
   end
 
-  describe "#check_piece_move" do
+  describe "#check_piece_move", :focus => true do
     subject(:game_move) { described_class.new }
 
     context 'when moving a pawn' do
-      it 'gives an error message if the move is not allowed' do
+      it 'gives an error message if the move is not allowed for the white pawn' do
         output = game_move.check_pawn_move(1, 2, 1, 6)
         expect(output).to eq('Invalid move for the type')
+      end
+
+      it 'gives an error message if the move is not allowed for the black pawn' do
+        output = game_move.check_pawn_move(1, 7, 1, 4)
+        expect(output).to eq('Invalid move for the type')
+      end
+
+      it 'returns allowed if the move is allowed for the white pawn' do
+        output = game_move.check_pawn_move(1, 2, 1, 4)
+        expect(output).to eq('allowed')
+      end
+
+      it 'returns allowed if the move is allowed for the black pawn' do
+        output = game_move.check_pawn_move(1, 7, 1, 5)
+        expect(output).to eq('allowed')
       end
     end
 
@@ -171,6 +186,7 @@ describe Game do
     end
   end
 
+  #rewrite this test for real game use if necessary
   describe '#check_move' do
     subject(:game_move) { described_class.new }
 
@@ -188,11 +204,6 @@ describe Game do
       it 'checks the move based on the piece type - knight' do
         output = game_move.check_move(2, 1, 1, 3)
         expect(output).to eq('knight')
-      end
-
-      it 'does not allow a move towards an occupied same player square' do
-        output = game_move.check_move(1, 1, 2, 2)
-        expect(output).to eq('same color')
       end
     end
   end
