@@ -276,8 +276,15 @@ class Game
   end
 
   def make_move(x1, y1, x2, y2)
-    if check_move(x1, y1, x2, y2) == 'allowed'
+    if check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) != 'knight'
       update_state(x1, y1, x2, y2) if free_path?(x1, y1, x2, y2) && !same_color?(x1, y1, x2, y2)
+      message = 'move made'
+    elsif check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) == 'knight'
+      update_state(x1, y1, x2, y2) if !same_color?(x1, y1, x2, y2)
+      message = 'move made'
+    else
+      message = "move is not allowed"
     end
+    puts message
   end
 end
