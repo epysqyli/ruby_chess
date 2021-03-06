@@ -74,7 +74,7 @@ class Game
   def detect_path(x1, y1, x2, y2)
     path = []
 
-    #single axis movements
+    # single axis movements
     if x2 > x1 || y2 > y1
       if x1 == x2 && y1 != y2
         until y1 == y2
@@ -101,7 +101,7 @@ class Game
       end
     end
 
-    #both axis movements
+    # both axis movements
     if x1 < x2 && y1 < y2
       until x1 == x2 && y1 == y2
         x1 += 1
@@ -129,36 +129,35 @@ class Game
     end
 
     path.pop
-    return path
+    path
   end
 
   def free_path?(x1, y1, x2, y2)
     if detect_path(x1, y1, x2, y2).all? { |square| square.state == ' ' }
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
   def same_color?(x1, y1, x2, y2)
     start_color = detect_color(x1, y1)
     finish_color = detect_color(x2, y2)
-    start_color == finish_color ? true : false
+    start_color == finish_color
   end
 
   def check_pawn_move(x1, y1, x2, y2)
-
-    #white pawns logic
+    # white pawns logic
     if detect_piece(x1, y1) == 'pawn' && detect_color(x1, y1) == 'white'
       if detect_piece(x2, y2) == ' '
         if y2 - y1 == 1
           'allowed'
-        elsif y2 - y1 == 2 && y1 == 2
+        elsif y2 - y1 == 2 && y1 == 2 && x2 == x1
           'allowed'
         else
           'Invalid move for the type'
         end
-      #pawn eating logic  
+      # pawn eating logic
       elsif detect_color(x2, y2) == 'black'
         if (x2 - x1).abs == (y2 - y1).abs
           if (y2 - y1).abs == 1
@@ -169,17 +168,17 @@ class Game
         end
       end
 
-    #black pawns logic
+    # black pawns logic
     elsif detect_piece(x1, y1) == 'pawn' && detect_color(x1, y1) == 'black'
       if detect_piece(x2, y2) == ' '
         if y1 - y2 == 1
           'allowed'
-        elsif y1 - y2 == 2 && y1 == 7
+        elsif y1 - y2 == 2 && y1 == 7 && x1 == x2
           'allowed'
         else
           'Invalid move for the type'
         end
-      #pawn eating logic  
+      # pawn eating logic
       elsif detect_color(x2, y2) == 'white'
         if (x2 - x1).abs == (y2 - y1).abs
           if (y2 - y1).abs == 1
@@ -269,24 +268,24 @@ class Game
   def check_move(x1, y1, x2, y2)
     if check_pawn_move(x1, y1, x2, y2) == 'allowed'
       type = 'pawn'
-      return 'allowed'
+      'allowed'
     elsif check_rook_move(x1, y1, x2, y2) == 'allowed'
       type = 'rook'
-      return 'allowed'
+      'allowed'
     elsif check_knight_move(x1, y1, x2, y2) == 'allowed'
       type = 'knight'
-      return 'allowed'
+      'allowed'
     elsif check_bishop_move(x1, y1, x2, y2) == 'allowed'
       type = 'bishop'
-      return 'allowed'
+      'allowed'
     elsif check_queen_move(x1, y1, x2, y2) == 'allowed'
       type = 'queen'
-      return 'allowed'
+      'allowed'
     elsif check_king_move(x1, y1, x2, y2) == 'allowed'
       type = 'king'
-      return 'allowed'
+      'allowed'
     else
-      return 'not allowed'
+      'not allowed'
     end
   end
 
@@ -308,11 +307,44 @@ class Game
       update_square(x1, y1, x2, y2) if free_path?(x1, y1, x2, y2) && !same_color?(x1, y1, x2, y2)
       # message = 'move made'
     elsif check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) == 'knight'
-      update_square(x1, y1, x2, y2) if !same_color?(x1, y1, x2, y2)
+      update_square(x1, y1, x2, y2) unless same_color?(x1, y1, x2, y2)
       # message = 'move made'
-    else
-      # message = "move is not allowed"
     end
     # puts message
   end
+
+  def enter_x1
+    puts 'Enter x1'
+    x1 = gets.chomp.to_i
+  end
+
+  def enter_y1
+    puts 'Enter y1'
+    y1 = gets.chomp.to_i
+  end
+
+  def enter_x2
+    puts 'Enter x2'
+    x2 = gets.chomp.to_i
+  end
+
+  def enter_y2
+    puts 'Enter y2'
+    y2 = gets.chomp.to_i
+  end
+
+  def play
+    x1 = enter_x1 until (1..9).include?(x1)
+    y1 = enter_y1 until (1..9).include?(y1)
+    x2 = enter_x2 until (1..9).include?(x2)
+    y2 = enter_y2 until (1..9).include?(y2)
+    make_move(x1, y1, x2, y2)
+    display_board
+  end
+end
+
+game = Game.new
+game.display_board
+3.times do
+  game.play
 end
