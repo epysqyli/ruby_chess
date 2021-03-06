@@ -127,9 +127,17 @@ class Game
         path << detect_square(x1, y1)
       end
     end
-    
+
     path.pop
     return path
+  end
+
+  def free_path?(x1, y1, x2, y2)
+    if detect_path(x1, y1, x2, y2).all? { |square| square.state == ' ' }
+      return true
+    else
+      return false
+    end
   end
 
   def check_pawn_move(x1, y1, _x2, y2)

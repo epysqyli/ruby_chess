@@ -63,7 +63,7 @@ describe Game do
     end
   end
 
-  describe '#detect_path', :focus => true do
+  describe '#detect_path' do
     subject(:game_path) { described_class.new }
 
     context 'when moving a rook from [1, 1] to [1, 5]' do
@@ -92,6 +92,20 @@ describe Game do
         output = game_path.detect_path(4, 4, 6, 2)
         expect(output.length).to eq(1)
       end
+    end
+  end
+
+  describe '#free_path?', :focus => true do
+    subject (:game_free_path) { described_class.new }
+
+    it 'returns true when moving from [2, 2] to [2, 6]' do
+      output = game_free_path.free_path?(2, 2, 2, 6)
+      expect(output).to be_truthy
+    end
+
+    it 'returns false when moving from [2, 2] to [6, 2]' do
+      output = game_free_path.free_path?(2, 2, 6, 2)
+      expect(output).to be_falsy
     end
   end
 
