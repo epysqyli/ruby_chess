@@ -126,63 +126,84 @@ describe Game do
   end
 
   describe "#check_piece_move" do
-    subject(:game_move) { described_class.new }
+    subject(:game_piece_move) { described_class.new }
 
     context 'when moving a pawn' do
       it 'gives an error message if the move is not allowed for the white pawn' do
-        output = game_move.check_pawn_move(1, 2, 1, 6)
+        output = game_piece_move.check_pawn_move(1, 2, 1, 6)
         expect(output).to eq('Invalid move for the type')
       end
 
       it 'gives an error message if the move is not allowed for the black pawn' do
-        output = game_move.check_pawn_move(1, 7, 1, 4)
+        output = game_piece_move.check_pawn_move(1, 7, 1, 4)
         expect(output).to eq('Invalid move for the type')
       end
 
       it 'returns allowed if the move is allowed for the white pawn' do
-        output = game_move.check_pawn_move(1, 2, 1, 4)
+        output = game_piece_move.check_pawn_move(1, 2, 1, 4)
         expect(output).to eq('allowed')
       end
 
       it 'returns allowed if the move is allowed for the black pawn' do
-        output = game_move.check_pawn_move(1, 7, 1, 5)
+        output = game_piece_move.check_pawn_move(1, 7, 1, 5)
         expect(output).to eq('allowed')
       end
     end
 
     context 'when moving a rook' do
       it 'gives an error message if the move is not allowed' do
-        output = game_move.check_rook_move(1, 1, 4, 6)
+        output = game_piece_move.check_rook_move(1, 1, 4, 6)
         expect(output).to eq('Invalid move for the type')
       end
     end
 
     context 'when moving a knight' do
       it 'gives an error message if the move is not allowed' do
-        output = game_move.check_knight_move(2, 1, 4, 6)
+        output = game_piece_move.check_knight_move(2, 1, 4, 6)
         expect(output).to eq('Invalid move for the type')
       end
     end
 
     context 'when moving a bishop' do
       it 'gives an error message if the move is not allowed' do
-        output = game_move.check_bishop_move(3, 1, 6, 5)
+        output = game_piece_move.check_bishop_move(3, 1, 6, 5)
         expect(output).to eq('Invalid move for the type')
       end
     end
 
     context 'when moving a queen' do
       it 'gives an error message if the move is not allowed' do
-        output = game_move.check_queen_move(4, 1, 6, 5)
+        output = game_piece_move.check_queen_move(4, 1, 6, 5)
         expect(output).to eq('Invalid move for the type')
       end
     end
 
     context 'when moving a king' do
       it 'gives an error message if the move is not allowed' do
-        output = game_move.check_king_move(5, 1, 5, 3)
+        output = game_piece_move.check_king_move(5, 1, 5, 3)
         expect(output).to eq('Invalid move for the type')
       end
     end
+  end
+
+  describe '#make_move', :focus => true do
+    subject(:game_move) { described_class.new }
+
+    context 'when making a legal move' do
+      it 'updates the board accordingly , knight to [3, 3]' do
+        game_move.make_move(2, 1, 3, 3)
+        type = game_move.detect_piece(3, 3)
+        expect(type).to eq('knight')
+      end
+    end
+
+    context 'when trying to make a non-legal move' do
+      it 'does not change the final square state' do
+        game_move.make_move(2, 1, 7, 7)
+        base_type = game_move.detect_piece(2, 1)
+        arrive_type = game_move.detect_piece(7, 7)
+        expect(arrive_type).not_to eq(base_type)
+      end
+    end         
   end
 end

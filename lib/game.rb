@@ -268,7 +268,6 @@ class Game
     start = detect_square(x1, y1)
     finish = detect_square(x2, y2)
 
-    # refactor in #update_square ?
     empty = ' '
     piece = start.state
     start.state = empty
@@ -278,13 +277,13 @@ class Game
   def make_move(x1, y1, x2, y2)
     if check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) != 'knight'
       update_state(x1, y1, x2, y2) if free_path?(x1, y1, x2, y2) && !same_color?(x1, y1, x2, y2)
-      message = 'move made'
+      # message = 'move made'
     elsif check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) == 'knight'
       update_state(x1, y1, x2, y2) if !same_color?(x1, y1, x2, y2)
-      message = 'move made'
+      # message = 'move made'
     else
-      message = "move is not allowed"
+      # message = "move is not allowed"
     end
-    puts message
+    # puts message
   end
 end
