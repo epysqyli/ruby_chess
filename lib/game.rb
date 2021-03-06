@@ -146,22 +146,51 @@ class Game
     start_color == finish_color ? true : false
   end
 
-  def check_pawn_move(x1, y1, _x2, y2)
+  def check_pawn_move(x1, y1, x2, y2)
+
+    #white pawns logic
     if detect_piece(x1, y1) == 'pawn' && detect_color(x1, y1) == 'white'
-      if y2 - y1 == 1
-        'allowed'
-      elsif y2 - y1 == 2 && y1 == 2
-        'allowed'
-      else
-        'Invalid move for the type'
+      if detect_piece(x2, y2) == ' '
+        if y2 - y1 == 1
+          'allowed'
+        elsif y2 - y1 == 2 && y1 == 2
+          'allowed'
+        else
+          'Invalid move for the type'
+        end
+      #pawn eating logic  
+      elsif detect_color(x2, y2) == 'black'
+        if (x2 - x1).abs == (y2 - y1).abs
+          if y2 - y1 == 1
+            'allowed'
+          elsif y2 - y1 == 2 && y1 == 2
+            'allowed'
+          else
+            'Invalid move for the type'
+          end
+        end
       end
+
+    #black pawns logic
     elsif detect_piece(x1, y1) == 'pawn' && detect_color(x1, y1) == 'black'
-      if y1 - y2 == 1
-        'allowed'
-      elsif y1 - y2 == 2 && y1 == 7
-        'allowed'
-      else
-        'Invalid move for the type'
+      if detect_piece(x2, y2) == ' '
+        if y1 - y2 == 1
+          'allowed'
+        elsif y1 - y2 == 2 && y1 == 7
+          'allowed'
+        else
+          'Invalid move for the type'
+        end
+      elsif detect_piece(x2, y2) != ' '
+        if (x2 - x1).abs == (y2 - y1).abs
+          if y2 - y1 == 1
+            'allowed'
+          elsif y2 - y1 == 2 && y1 == 2
+            'allowed'
+          else
+            'Invalid move for the type'
+          end
+        end
       end
     end
   end
@@ -264,22 +293,25 @@ class Game
     end
   end
 
-  def update_state(x1, y1, x2, y2)
+  def update_square(x1, y1, x2, y2)
     start = detect_square(x1, y1)
     finish = detect_square(x2, y2)
 
     empty = ' '
-    piece = start.state
+    state = start.state
+    color = start.color
     start.state = empty
-    finish.state = piece
+    start.color = empty
+    finish.state = state
+    finish.color = color
   end
 
   def make_move(x1, y1, x2, y2)
     if check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) != 'knight'
-      update_state(x1, y1, x2, y2) if free_path?(x1, y1, x2, y2) && !same_color?(x1, y1, x2, y2)
+      update_square(x1, y1, x2, y2) if free_path?(x1, y1, x2, y2) && !same_color?(x1, y1, x2, y2)
       # message = 'move made'
     elsif check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) == 'knight'
-      update_state(x1, y1, x2, y2) if !same_color?(x1, y1, x2, y2)
+      update_square(x1, y1, x2, y2) if !same_color?(x1, y1, x2, y2)
       # message = 'move made'
     else
       # message = "move is not allowed"

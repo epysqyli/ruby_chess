@@ -150,6 +150,24 @@ describe Game do
       end
     end
 
+    context 'when using a pawn to eat another piece', :focus => true do
+      it 'cannot eat a black piece directly in front of a white one' do
+        game_piece_move.make_move(4, 2, 4, 4)
+        game_piece_move.make_move(4, 7, 4, 5)
+        output = game_piece_move.detect_color(4, 5)
+        game_piece_move.make_move(4, 4, 4, 5)
+        expect(output).to eq('black')
+      end
+
+      it 'can eat a black piece diagonally with respect to a white one' do
+        game_piece_move.make_move(4, 2, 4, 4)
+        game_piece_move.make_move(3, 7, 3, 5)
+        game_piece_move.make_move(4, 4, 3, 5)
+        output = game_piece_move.detect_color(3, 5)
+        expect(output).to eq('white')
+      end
+    end
+
     context 'when moving a rook' do
       it 'gives an error message if the move is not allowed' do
         output = game_piece_move.check_rook_move(1, 1, 4, 6)
@@ -186,7 +204,7 @@ describe Game do
     end
   end
 
-  describe '#make_move', :focus => true do
+  describe '#make_move' do
     subject(:game_move) { described_class.new }
 
     context 'when making a legal move' do
