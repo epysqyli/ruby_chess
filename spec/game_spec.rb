@@ -63,6 +63,24 @@ describe Game do
     end
   end
 
+  describe '#detect_path', :focus => true do
+    subject(:game_path) { described_class.new }
+
+    context 'when moving a rook from [1, 1] to [1, 5]' do
+      it 'lenght of the in between squares array is 3' do
+        output = game_path.detect_path(1, 1, 1, 5)
+        expect(output.length).to eq(3)
+      end
+    end
+
+    context 'when moving a bishop from [3, 1] to [5, 3]' do
+      it 'lenght of the in between squares array is 1' do
+        output = game_path.detect_path(3, 1, 5, 3)
+        expect(output.length).to eq(1)
+      end
+    end
+  end
+
   describe "#check_piece_move" do
     subject(:game_move) { described_class.new }
 
@@ -128,7 +146,7 @@ describe Game do
         expect(output).to eq('knight')
       end
 
-      it 'does not allow a move towards an occupied same player square', :focus => true do
+      it 'does not allow a move towards an occupied same player square' do
         output = game_move.check_move(1, 1, 2, 2)
         expect(output).to eq('same color')
       end

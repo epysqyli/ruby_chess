@@ -71,6 +71,29 @@ class Game
     end
   end
 
+  def detect_path(x1, y1, x2, y2)
+    path = []
+    if x1 == x2 && y1 != y2
+      until y1 == y2
+        y1 += 1
+        path << detect_square(x1, y1)
+      end
+    elsif x1 != x2 && y1 == y2
+      until x1 == x2
+        x1 += 1
+        path << detect_square(x1, y1)
+      end
+    elsif x1 != x2 && y1 != y2
+      until x1 == x2 && y1 == y2
+        x1 += 1
+        y1 += 1
+        path << detect_square(x1, y1)
+      end
+    end
+    path.pop
+    return path
+  end
+
   def check_pawn_move(x1, y1, _x2, y2)
     if detect_piece(x1, y1) == 'pawn'
       if y2 - y1 == 1
@@ -174,6 +197,7 @@ class Game
     start = detect_square(x1, y1)
     finish = detect_square(x2, y2)
 
+    # refactor in #update_square ?
     empty = ' '
     piece = start.state
     start.state = empty
