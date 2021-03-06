@@ -3,12 +3,13 @@
 
 class Square
   attr_reader :x, :y
-  attr_accessor :state
+  attr_accessor :state, :color
 
-  def initialize(x, y, state = ' ')
+  def initialize(x, y, state = ' ', color = ' ')
     @x = x
     @y = y
     @state = state
+    @color = color
   end
 end
 
@@ -44,20 +45,20 @@ class ChessBoard
 
   def create_board
     # white pieces first row
-    @board << Square.new(1, 1, state = ChessBoard.white_pieces[:rook])
-    @board << Square.new(2, 1, state = ChessBoard.white_pieces[:knight])
-    @board << Square.new(3, 1, state = ChessBoard.white_pieces[:bishop])
-    @board << Square.new(4, 1, state = ChessBoard.white_pieces[:queen])
-    @board << Square.new(5, 1, state = ChessBoard.white_pieces[:king])
-    @board << Square.new(6, 1, state = ChessBoard.white_pieces[:bishop])
-    @board << Square.new(7, 1, state = ChessBoard.white_pieces[:knight])
-    @board << Square.new(8, 1, state = ChessBoard.white_pieces[:rook])
+    @board << Square.new(1, 1, state = ChessBoard.white_pieces[:rook], color = 'white')
+    @board << Square.new(2, 1, state = ChessBoard.white_pieces[:knight], color = 'white')
+    @board << Square.new(3, 1, state = ChessBoard.white_pieces[:bishop], color = 'white')
+    @board << Square.new(4, 1, state = ChessBoard.white_pieces[:queen], color = 'white')
+    @board << Square.new(5, 1, state = ChessBoard.white_pieces[:king], color = 'white')
+    @board << Square.new(6, 1, state = ChessBoard.white_pieces[:bishop], color = 'white')
+    @board << Square.new(7, 1, state = ChessBoard.white_pieces[:knight], color = 'white')
+    @board << Square.new(8, 1, state = ChessBoard.white_pieces[:rook], color = 'white')
 
     # white pawns creation
     x = 1
     y = 2
     while x < 9
-      @board << Square.new(x, y, state = ChessBoard.white_pieces[:pawn])
+      @board << Square.new(x, y, state = ChessBoard.white_pieces[:pawn], color = 'white')
       x += 1
     end
 
@@ -77,19 +78,19 @@ class ChessBoard
     x = 1
     y = 7
     while x < 9
-      @board << Square.new(x, y, state = ChessBoard.black_pieces[:pawn])
+      @board << Square.new(x, y, state = ChessBoard.black_pieces[:pawn], color = 'black')
       x += 1
     end
 
     # black pieces first row
-    @board << Square.new(1, 8, state = ChessBoard.black_pieces[:rook])
-    @board << Square.new(2, 8, state = ChessBoard.black_pieces[:knight])
-    @board << Square.new(3, 8, state = ChessBoard.black_pieces[:bishop])
-    @board << Square.new(4, 8, state = ChessBoard.black_pieces[:queen])
-    @board << Square.new(5, 8, state = ChessBoard.black_pieces[:king])
-    @board << Square.new(6, 8, state = ChessBoard.black_pieces[:bishop])
-    @board << Square.new(7, 8, state = ChessBoard.black_pieces[:knight])
-    @board << Square.new(8, 8, state = ChessBoard.black_pieces[:rook])
+    @board << Square.new(1, 8, state = ChessBoard.black_pieces[:rook], color = 'black')
+    @board << Square.new(2, 8, state = ChessBoard.black_pieces[:knight], color = 'black')
+    @board << Square.new(3, 8, state = ChessBoard.black_pieces[:bishop], color = 'black')
+    @board << Square.new(4, 8, state = ChessBoard.black_pieces[:queen], color = 'black')
+    @board << Square.new(5, 8, state = ChessBoard.black_pieces[:king], color = 'black')
+    @board << Square.new(6, 8, state = ChessBoard.black_pieces[:bishop], color = 'black')
+    @board << Square.new(7, 8, state = ChessBoard.black_pieces[:knight], color = 'black')
+    @board << Square.new(8, 8, state = ChessBoard.black_pieces[:rook], color = 'black')
   end
 
 end

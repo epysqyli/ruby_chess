@@ -44,6 +44,14 @@ class Game
     puts "\n"
   end
 
+  def detect_square(x, y)
+    @board.detect { |s| [s.x, s.y] == [x, y] }
+  end
+
+  def detect_color(x, y)
+    detect_square(x, y).color
+  end
+
   def detect_piece(x, y)
     pos = detect_square(x, y)
     if pos.state == ChessBoard.black_pieces[:king] || pos.state == ChessBoard.white_pieces[:king]
@@ -63,24 +71,182 @@ class Game
     end
   end
 
-  # def check_constraints
+  def detect_path(x1, y1, x2, y2)
+    path = []
 
-  def detect_square(x, y)
-    @board.detect { |s| [s.x, s.y] == [x, y] }
+    #single axis movements
+    if x2 > x1 || y2 > y1
+      if x1 == x2 && y1 != y2
+        until y1 == y2
+          y1 += 1
+          path << detect_square(x1, y1)
+        end
+      elsif x1 != x2 && y1 == y2
+        until x1 == x2
+          x1 += 1
+          path << detect_square(x1, y1)
+        end
+      end
+    elsif x2 < x1 || y2 < y1
+      if x1 == x2 && y1 != y2
+        until y1 == y2
+          y1 -= 1
+          path << detect_square(x1, y1)
+        end
+      elsif x1 != x2 && y1 == y2
+        until x1 == x2
+          x1 -= 1
+          path << detect_square(x1, y1)
+        end
+      end
+    end
+
+    #both axis movements
+    if x1 < x2 && y1 < y2
+      until x1 == x2 && y1 == y2
+        x1 += 1
+        y1 += 1
+        path << detect_square(x1, y1)
+      end
+    elsif x1 > x2 && y1 > y2
+      until x1 == x2 && y1 == y2
+        x1 -= 1
+        y1 -= 1
+        path << detect_square(x1, y1)
+      end
+    elsif x1 < x2 && y1 > y2
+      until x1 == x2 && y1 == y2
+        x1 += 1
+        y1 -= 1
+        path << detect_square(x1, y1)
+      end
+    elsif x1 > x2 && y1 < y2
+      until x1 == x2 && y1 == y2
+        x1 -= 1
+        y1 += 1
+        path << detect_square(x1, y1)
+      end
+    end
+
+    path.pop
+    return path
+  end
+
+  def free_path?(x1, y1, x2, y2)
+    if detect_path(x1, y1, x2, y2).all? { |square| square.state == ' ' }
+      return true
+    else
+      return false
+    end
+  end
+
+  def check_pawn_move(x1, y1, _x2, y2)
+    if detect_piece(x1, y1) == 'pawn'
+      if y2 - y1 == 1
+        'allowed'
+      elsif y2 - y1 == 2 && y1 == 2
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
+  end
+
+  def check_rook_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'rook'
+      if x1 == x2
+        'allowed'
+      elsif y1 == y2
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
+  end
+
+  def check_knight_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'knight'
+      if (x2 - x1) == 2 && (y2 - y1) == 1
+        'allowed'
+      elsif (x2 - x1) == 2 && (y2 - y1) == -1
+        'allowed'
+      elsif (x2 - x1) == -2 && (y2 - y1) == 1
+        'allowed'
+      elsif (x2 - x1) == -2 && (y2 - y1) == -1
+        'allowed'
+      elsif (x2 - x1) == 1 && (y2 - y1) == 2
+        'allowed'
+      elsif (x2 - x1) == -1 && (y2 - y1) == 2
+        'allowed'
+      elsif (x2 - x1) == 1 && (y2 - y1) == -2
+        'allowed'
+      elsif (x2 - x1) == -1 && (y2 - y1) == -2
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
+  end
+
+  def check_bishop_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'bishop'
+      if (x2 - x1).abs == (y2 - y1).abs
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
+  end
+
+  def check_queen_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'queen'
+      if (x2 - x1).abs == (y2 - y1).abs
+        'allowed'
+      elsif x1 == x2
+        'allowed'
+      elsif y1 == y2
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
+  end
+
+  def check_king_move(x1, y1, x2, y2)
+    if detect_piece(x1, y1) == 'king'
+      if (x2 - x1).abs == (y2 - y1).abs && (x2 - x1).abs == 1
+        'allowed'
+      elsif x1 == x2 && (y2 - y1).abs == 1
+        'allowed'
+      elsif y1 == y2 && (x2 - x1).abs == 1
+        'allowed'
+      else
+        'Invalid move for the type'
+      end
+    end
+  end
+
+  def check_move(x1, y1, x2, y2)
+    if detect_color(x1, y1) != detect_color(x2, y2)
+      return 'pawn' if check_pawn_move(x1, y1, x2, y2)
+      return 'rook' if check_rook_move(x1, y1, x2, y2)
+      return 'knight' if check_knight_move(x1, y1, x2, y2)
+      return 'bishop' if check_bishop_move(x1, y1, x2, y2)
+      return 'queen' if check_queen_move(x1, y1, x2, y2)
+      return 'king' if check_king_move(x1, y1, x2, y2)
+    else
+      'same color'
+    end
   end
 
   def make_move(x1, y1, x2, y2)
     start = detect_square(x1, y1)
     finish = detect_square(x2, y2)
 
+    # refactor in #update_square ?
     empty = ' '
     piece = start.state
     start.state = empty
     finish.state = piece
   end
 end
-
-# game = Game.new
-# game.display_board
-# game.make_move(2, 2, 2, 3)
-# game.display_board
