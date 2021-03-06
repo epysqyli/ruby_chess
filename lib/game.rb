@@ -241,22 +241,30 @@ class Game
   end
 
   def check_move(x1, y1, x2, y2)
-    if check_pawn_move(x1, y1, x2, y2)
-      return 'pawn'
-    elsif check_rook_move(x1, y1, x2, y2)
-      return 'rook'
-    elsif check_knight_move(x1, y1, x2, y2)
-      return 'knight'
-    elsif check_bishop_move(x1, y1, x2, y2)
-      return 'bishop'
-    elsif check_queen_move(x1, y1, x2, y2)
-      return 'queen'
-    elsif check_king_move(x1, y1, x2, y2)
-      return 'king'
+    if check_pawn_move(x1, y1, x2, y2) == 'allowed'
+      type = 'pawn'
+      return 'allowed'
+    elsif check_rook_move(x1, y1, x2, y2) == 'allowed'
+      type = 'rook'
+      return 'allowed'
+    elsif check_knight_move(x1, y1, x2, y2) == 'allowed'
+      type = 'knight'
+      return 'allowed'
+    elsif check_bishop_move(x1, y1, x2, y2) == 'allowed'
+      type = 'bishop'
+      return 'allowed'
+    elsif check_queen_move(x1, y1, x2, y2) == 'allowed'
+      type = 'queen'
+      return 'allowed'
+    elsif check_king_move(x1, y1, x2, y2) == 'allowed'
+      type = 'king'
+      return 'allowed'
+    else
+      return 'not allowed'
     end
   end
 
-  def make_move(x1, y1, x2, y2)
+  def update_state(x1, y1, x2, y2)
     start = detect_square(x1, y1)
     finish = detect_square(x2, y2)
 
@@ -265,5 +273,11 @@ class Game
     piece = start.state
     start.state = empty
     finish.state = piece
+  end
+
+  def make_move(x1, y1, x2, y2)
+    if check_move(x1, y1, x2, y2) == 'allowed'
+      update_state(x1, y1, x2, y2) if free_path?(x1, y1, x2, y2) && !same_color?(x1, y1, x2, y2)
+    end
   end
 end

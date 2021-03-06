@@ -125,7 +125,7 @@ describe Game do
     end
   end
 
-  describe "#check_piece_move", :focus => true do
+  describe "#check_piece_move" do
     subject(:game_move) { described_class.new }
 
     context 'when moving a pawn' do
@@ -182,28 +182,6 @@ describe Game do
       it 'gives an error message if the move is not allowed' do
         output = game_move.check_king_move(5, 1, 5, 3)
         expect(output).to eq('Invalid move for the type')
-      end
-    end
-  end
-
-  #rewrite this test for real game use if necessary
-  describe '#check_move' do
-    subject(:game_move) { described_class.new }
-
-    context 'when a piece is to be moved' do
-      it 'checks the move based on the piece type - pawn' do
-        output = game_move.check_move(2, 2, 2, 3)
-        expect(output).to eq('pawn')
-      end
-
-      it 'checks the move based on the piece type - rook' do
-        output = game_move.check_move(1, 1, 1, 5)
-        expect(output).to eq('rook')
-      end
-
-      it 'checks the move based on the piece type - knight' do
-        output = game_move.check_move(2, 1, 1, 3)
-        expect(output).to eq('knight')
       end
     end
   end
