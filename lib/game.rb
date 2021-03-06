@@ -161,9 +161,7 @@ class Game
       #pawn eating logic  
       elsif detect_color(x2, y2) == 'black'
         if (x2 - x1).abs == (y2 - y1).abs
-          if y2 - y1 == 1
-            'allowed'
-          elsif y2 - y1 == 2 && y1 == 2
+          if (y2 - y1).abs == 1
             'allowed'
           else
             'Invalid move for the type'
@@ -181,11 +179,10 @@ class Game
         else
           'Invalid move for the type'
         end
-      elsif detect_piece(x2, y2) != ' '
+      #pawn eating logic  
+      elsif detect_color(x2, y2) == 'white'
         if (x2 - x1).abs == (y2 - y1).abs
-          if y2 - y1 == 1
-            'allowed'
-          elsif y2 - y1 == 2 && y1 == 2
+          if (y2 - y1).abs == 1
             'allowed'
           else
             'Invalid move for the type'

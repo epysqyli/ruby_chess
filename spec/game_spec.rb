@@ -166,6 +166,14 @@ describe Game do
         output = game_piece_move.detect_color(3, 5)
         expect(output).to eq('white')
       end
+
+      it 'can eat a white piece diagonally with respect to a black one' do
+        game_piece_move.make_move(3, 7, 3, 5)
+        game_piece_move.make_move(4, 2, 4, 4)
+        game_piece_move.make_move(3, 5, 4, 4)
+        output = game_piece_move.detect_color(4, 4)
+        expect(output).to eq('black')
+      end
     end
 
     context 'when moving a rook' do
