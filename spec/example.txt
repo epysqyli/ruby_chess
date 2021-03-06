@@ -6,8 +6,10 @@ example_id                   | status  | run_time        |
 ./spec/game_spec.rb[1:3:1]   | passed  | 0.00084 seconds |
 ./spec/game_spec.rb[1:3:2]   | passed  | 0.00024 seconds |
 ./spec/game_spec.rb[1:4:1:1] | unknown |                 |
-./spec/game_spec.rb[1:5:1:1] | passed  | 0.00085 seconds |
-./spec/game_spec.rb[1:5:2:1] | passed  | 0.00026 seconds |
+./spec/game_spec.rb[1:5:1:1] | passed  | 0.00099 seconds |
+./spec/game_spec.rb[1:5:2:1] | passed  | 0.00029 seconds |
+./spec/game_spec.rb[1:5:3:1] | passed  | 0.0002 seconds  |
+./spec/game_spec.rb[1:5:4:1] | passed  | 0.00021 seconds |
 ./spec/game_spec.rb[1:6:1:1] | unknown |                 |
 ./spec/game_spec.rb[1:6:2:1] | unknown |                 |
 ./spec/game_spec.rb[1:6:3:1] | unknown |                 |

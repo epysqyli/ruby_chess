@@ -73,9 +73,23 @@ describe Game do
       end
     end
 
+    context 'when moving a rook from [7, 6] to [7, 2]' do
+      it 'lenght of the in between squares array is 3' do
+        output = game_path.detect_path(7, 6, 7, 2)
+        expect(output.length).to eq(3)
+      end
+    end
+
     context 'when moving a bishop from [3, 1] to [5, 3]' do
       it 'lenght of the in between squares array is 1' do
         output = game_path.detect_path(3, 1, 5, 3)
+        expect(output.length).to eq(1)
+      end
+    end
+
+    context 'when moving a bishop from [4, 4] to [6, 2]' do
+      it 'lenght of the in between squares array is 1' do
+        output = game_path.detect_path(4, 4, 6, 2)
         expect(output.length).to eq(1)
       end
     end

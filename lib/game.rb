@@ -73,23 +73,61 @@ class Game
 
   def detect_path(x1, y1, x2, y2)
     path = []
-    if x1 == x2 && y1 != y2
-      until y1 == y2
-        y1 += 1
-        path << detect_square(x1, y1)
+
+    #single axis movements
+    if x2 > x1 || y2 > y1
+      if x1 == x2 && y1 != y2
+        until y1 == y2
+          y1 += 1
+          path << detect_square(x1, y1)
+        end
+      elsif x1 != x2 && y1 == y2
+        until x1 == x2
+          x1 += 1
+          path << detect_square(x1, y1)
+        end
       end
-    elsif x1 != x2 && y1 == y2
-      until x1 == x2
-        x1 += 1
-        path << detect_square(x1, y1)
+    elsif x2 < x1 || y2 < y1
+      if x1 == x2 && y1 != y2
+        until y1 == y2
+          y1 -= 1
+          path << detect_square(x1, y1)
+        end
+      elsif x1 != x2 && y1 == y2
+        until x1 == x2
+          x1 -= 1
+          path << detect_square(x1, y1)
+        end
       end
-    elsif x1 != x2 && y1 != y2
+    end
+
+    #both axis movements
+    if x1 < x2 && y1 < y2
       until x1 == x2 && y1 == y2
         x1 += 1
         y1 += 1
         path << detect_square(x1, y1)
       end
+    elsif x1 > x2 && y1 > y2
+      until x1 == x2 && y1 == y2
+        x1 -= 1
+        y1 -= 1
+        path << detect_square(x1, y1)
+      end
+    elsif x1 < x2 && y1 > y2
+      until x1 == x2 && y1 == y2
+        x1 += 1
+        y1 -= 1
+        path << detect_square(x1, y1)
+      end
+    elsif x1 > x2 && y1 < y2
+      until x1 == x2 && y1 == y2
+        x1 -= 1
+        y1 += 1
+        path << detect_square(x1, y1)
+      end
     end
+    
     path.pop
     return path
   end
