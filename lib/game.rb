@@ -338,6 +338,18 @@ class Game
     end
   end
 
+  def pawn_check_black
+    x = detect_black_king.x
+    y = detect_black_king.y
+    if detect_piece(x + 1, y - 1) == 'pawn' && detect_color(x + 1, y - 1) == 'white'
+      'check'
+    elsif detect_piece(x - 1, y - 1) == 'pawn' && detect_color(x - 1, y - 1) == 'white'
+      'check'
+    else
+      'nope'
+    end
+  end
+
   def enter_x1
     puts 'Enter x1'
     gets.chomp.to_i

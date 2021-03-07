@@ -244,7 +244,7 @@ describe Game do
     end         
   end
 
-  describe '#pawn_check_white', :focus => true do
+  describe '#pawn_check_white' do
     subject(:game_pawn_check) {described_class.new }
 
     context 'when the black pawn checks the white king' do
@@ -266,6 +266,33 @@ describe Game do
         square_3_5.color = 'black'
 
         output = game_pawn_check.pawn_check_white
+        expect(output).to eq('check')
+      end
+    end
+  end
+
+  describe '#pawn_check_black', :focus => true do
+    subject(:game_pawn_check) {described_class.new }
+
+    context 'when the whit pawn checks the black king' do
+      it 'returns check condition for the black king' do
+        square_5_1 = game_pawn_check.detect_square(5, 8)
+        square_5_1.state = ' '
+        square_5_1.color = ' '
+
+        square_5_5 = game_pawn_check.detect_square(5, 5)
+        square_5_5.state = "\u2654"
+        square_5_5.color = 'black'
+
+        square_5_5 = game_pawn_check.detect_square(6, 4)
+        square_5_5.state= "\u265F"
+        square_5_5.color = 'white'
+
+        square_3_5 = game_pawn_check.detect_square(4, 4)
+        square_3_5.state = "\u265F"
+        square_3_5.color = 'white'
+
+        output = game_pawn_check.pawn_check_black
         expect(output).to eq('check')
       end
     end
