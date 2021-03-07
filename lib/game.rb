@@ -3,6 +3,7 @@ require_relative 'player'
 
 class Game
   attr_accessor :board
+  @@move_outcome = ''
 
   def initialize
     @board = ChessBoard.new.board
@@ -305,10 +306,12 @@ class Game
   def make_move(x1, y1, x2, y2)
     if check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) != 'knight'
       update_square(x1, y1, x2, y2) if free_path?(x1, y1, x2, y2) && !same_color?(x1, y1, x2, y2)
+      @@move_outcome = 'valid move'
     elsif check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) == 'knight'
       update_square(x1, y1, x2, y2) unless same_color?(x1, y1, x2, y2)
+      @@move_outcome = 'valid move'
     else
-      'invalid move'
+      @@move_outcome = 'invalid move'
     end
   end
 
@@ -345,10 +348,11 @@ class Game
     make_move(x1, y1, x2, y2)
 
     display_board
+    @@move_outcome = ''
   end
 
   def play_game
-    play_turn until make_move(x1, y1, x2, y2) != 'invalid move'
+    play_turn until @@move_outcome == 'valid move'
   end
 end
 
