@@ -320,7 +320,7 @@ describe Game do
   end
 
 
-  describe '#rook_check', :focus => true do
+  describe '#rook_check' do
     subject(:game_rook_check) { described_class.new }
 
     context 'when the black rook checks the white king' do
@@ -363,6 +363,54 @@ describe Game do
 
         king = game_rook_check.detect_black_king
         output = game_rook_check.rook_check(king)
+        expect(output).to eq('check')
+      end
+    end
+  end
+
+  describe '#bishop_check' do
+    subject(:game_bishop_check) { described_class.new }
+
+    context 'when the black bishop checks the white king' do
+      it 'returns check condition for the white king' do
+        square_5_1 = game_bishop_check.detect_square(5, 1)
+        square_5_1.state = ' '
+        square_5_1.color = ' '
+
+        square_4_4 = game_bishop_check.detect_square(4, 4)
+        square_4_4.state = "\u265A"
+        square_4_4.color = 'white'
+
+        square_2_6 = game_bishop_check.detect_square(2, 6)
+        square_2_6.state = "\u2657"
+        square_2_6.color = 'black'
+
+        game_bishop_check.display_board
+
+        king = game_bishop_check.detect_white_king
+        output = game_bishop_check.bishop_check(king)
+        expect(output).to eq('check')
+      end
+    end
+
+    context 'when the white bishop checks the black king' do
+      it 'returns check condition for the black king' do
+        square_5_8 = game_bishop_check.detect_square(5, 8)
+        square_5_8.state = ' '
+        square_5_8.color = ' '
+
+        square_3_5 = game_bishop_check.detect_square(3, 5)
+        square_3_5.state = "\u2654"
+        square_3_5.color = 'black'
+
+        square_5_3 = game_bishop_check.detect_square(5, 3)
+        square_5_3.state = "\u265D"
+        square_5_3.color = 'white'
+
+        game_bishop_check.display_board
+
+        king = game_bishop_check.detect_black_king
+        output = game_bishop_check.bishop_check(king)
         expect(output).to eq('check')
       end
     end
