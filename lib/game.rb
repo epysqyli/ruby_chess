@@ -151,6 +151,10 @@ class Game
     @board.detect { |s| s.state == ChessBoard.white_pieces[:king] }
   end
 
+  def detect_black_king
+    @board.detect { |s| s.state == ChessBoard.black_pieces[:king] }
+  end
+
   def check_pawn_move(x1, y1, x2, y2)
     # white pawns logic
     if detect_piece(x1, y1) == 'pawn' && detect_color(x1, y1) == 'white'
@@ -320,7 +324,18 @@ class Game
   end
 
   def check?
-    king = detect_white_king
+  end
+
+  def pawn_check_white
+    x = detect_white_king.x
+    y = detect_white_king.y
+    if detect_piece(x + 1, y + 1) == 'pawn' && detect_color(x + 1, y + 1) == 'black'
+      'check'
+    elsif detect_piece(x - 1, y + 1) == 'pawn' && detect_color(x - 1, y + 1) == 'black'
+      'check'
+    else
+      'nope'
+    end
   end
 
   def enter_x1
@@ -364,8 +379,8 @@ class Game
   end
 end
 
-game = Game.new
-game.display_board
-5.times do
-  game.play_game
-end
+# game = Game.new
+# game.display_board
+# 5.times do
+#   game.play_game
+# end
