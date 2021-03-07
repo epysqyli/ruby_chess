@@ -4,8 +4,6 @@ require_relative 'player'
 class Game
   attr_accessor :board
 
-  @@move_outcome = ''
-
   def initialize
     @board = ChessBoard.new.board
     @white = Player.new('white')
@@ -315,27 +313,17 @@ class Game
   def make_move(x1, y1, x2, y2)
     if check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) != 'knight'
       update_square(x1, y1, x2, y2) if free_path?(x1, y1, x2, y2) && !same_color?(x1, y1, x2, y2)
-      @@move_outcome = 'valid move'
     elsif check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) == 'knight'
       update_square(x1, y1, x2, y2) unless same_color?(x1, y1, x2, y2)
-      @@move_outcome = 'valid move'
     else
-      @@move_outcome = 'invalid move'
-    end
-  end
-
-  # based on player turn: king = detect white or black king
-  def check?(king)
-    if pawn_check_black(king) == 'check' || pawn_check_white(king) == 'check' || knight_check(king) == 'check' || rook_check(king) == 'check' || bishop_check(king) == 'check' || queen_check(king) == 'check'
-      true
-    else
-      false
+      puts 'invalid move'
     end
   end
 
   def pawn_check_white(king)
     x = king.x
     y = king.y
+    # one or more of the transformations can be nil because out of the board
     if detect_piece(x + 1, y + 1) == 'pawn' && detect_color(x + 1, y + 1) == 'black'
       'check'
     elsif detect_piece(x - 1, y + 1) == 'pawn' && detect_color(x - 1, y + 1) == 'black'
@@ -348,6 +336,7 @@ class Game
   def pawn_check_black(king)
     x = king.x
     y = king.y
+    # one or more of the transformations can be nil because out of the board
     if detect_piece(x + 1, y - 1) == 'pawn' && detect_color(x + 1, y - 1) == 'white'
       'check'
     elsif detect_piece(x - 1, y - 1) == 'pawn' && detect_color(x - 1, y - 1) == 'white'
@@ -782,6 +771,25 @@ class Game
     condition
   end
 
+  # based on player turn: king = detect white or black king
+  def check?(king)
+    if king.color == 'black'
+      true if pawn_check_black(king) == 'check'      
+    elsif king.color == 'white'
+      true if pawn_check_white(king) == 'check'
+    elsif rook_check(king) == 'check'
+      true
+    elsif knight_check(king) == 'check'
+      true
+    elsif bishop_check(king) == 'check'
+      true
+    elsif check_queen_move(king) == 'check'
+      true
+    else
+      false
+    end
+  end
+
   def enter_x1
     puts 'Enter x1'
     gets.chomp.to_i
@@ -802,27 +810,36 @@ class Game
     gets.chomp.to_i
   end
 
-  def play_turn
-    # start position --> scope variable issue
+  def play_turn_white
     x1 = enter_x1 until (1..9).include?(x1)
     y1 = enter_y1 until (1..9).include?(y1)
-
-    # final position
     x2 = enter_x2 until (1..9).include?(x2)
     y2 = enter_y2 until (1..9).include?(y2)
 
-    # move application
     make_move(x1, y1, x2, y2)
+    puts 'Check' if check?(detect_black_king)
 
     display_board
-    @@move_outcome = ''
   end
 
-  def play_game
-    play_turn until @@move_outcome == 'valid move'
+  def play_turn_black
+    x1 = enter_x1 until (1..9).include?(x1)
+    y1 = enter_y1 until (1..9).include?(y1)
+    x2 = enter_x2 until (1..9).include?(x2)
+    y2 = enter_y2 until (1..9).include?(y2)
+
+    make_move(x1, y1, x2, y2)
+    puts 'Check' if check?(detect_white_king)
+
+    display_board
+  end
+
+  def play
+    play_turn_white
+    play_turn_black
   end
 end
 
-# game = Game.new
-# game.display_board
-# game.play_game
+game = Game.new
+game.display_board
+game.play_turn_white while true
