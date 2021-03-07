@@ -324,7 +324,14 @@ class Game
     end
   end
 
-  def check?; end
+  # based on player turn: king = detect white or black king
+  def check?(king)
+    if pawn_check_black(king) == 'check' || pawn_check_white(king) == 'check' || knight_check(king) == 'check' || rook_check(king) == 'check' || bishop_check(king) == 'check' || queen_check(king) == 'check'
+      true
+    else
+      false
+    end
+  end
 
   def pawn_check_white(king)
     x = king.x
@@ -818,6 +825,4 @@ end
 
 # game = Game.new
 # game.display_board
-# 5.times do
-#   game.play_game
-# end
+# game.play_game
