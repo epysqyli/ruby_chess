@@ -378,8 +378,80 @@ class Game
   end
 
   def rook_check(king)
-    x = king.x
-    y = king.y
+    # left path
+    left_path = []
+    detect_path(king.x, king.y, 1, king.y).each { |s| left_path << s }
+    left_path.each {|s| p s}
+    
+    # right path
+    right_path = []
+    detect_path(king.x, king.y, 8, king.y).each { |s| right_path << s }
+
+    # up path
+    up_path = []
+    detect_path(king.x, king.y, king.x, 8).each { |s| up_path << s }
+    
+    # down path
+    down_path = []
+    detect_path(king.x, king.y, king.x, 1).each { |s| down_path << s }
+
+    condition = 'nope'
+
+    if king.color == 'white'
+      # left path
+      rook = left_path.detect do |square|
+        detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
+      end
+      return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+
+      # right_path
+      rook = right_path.detect do |square|
+        detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
+      end
+      return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+
+      # up path
+      rook = up_path.detect do |square|
+        detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
+      end
+      return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+
+      # down path
+      rook = down_path.detect do |square|
+        detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
+      end
+      return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+
+    end
+
+    if king.color == 'black'
+
+      # left path
+      rook = left_path.detect do |square|
+        detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
+      end
+      return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+
+      # right_path
+      rook = right_path.detect do |square|
+        detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
+      end
+      return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+
+      # up path
+      rook = up_path.detect do |square|
+        detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
+      end
+      return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+
+      # down path
+      rook = down_path.detect do |square|
+        detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
+      end
+      return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+
+    end
+    return condition
   end
 
   def enter_x1
@@ -423,9 +495,8 @@ class Game
   end
 end
 
-game = Game.new
+# game = Game.new
 # game.display_board
 # 5.times do
 #   game.play_game
 # end
-game.detect_path(1, 1, 5, 1).each { |s| p s }

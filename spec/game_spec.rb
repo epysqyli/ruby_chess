@@ -95,7 +95,7 @@ describe Game do
     end
   end
 
-  describe '#free_path?', :focus => true do
+  describe '#free_path?' do
     subject (:game_free_path) { described_class.new }
 
     it 'returns true when moving from [2, 2] to [2, 6]' do
@@ -323,13 +323,48 @@ describe Game do
   describe '#rook_check', :focus => true do
     subject(:game_rook_check) { described_class.new }
 
+    context 'when the black rook checks the white king' do
+      it 'returns check condition for the white king' do
+        square_5_1 = game_rook_check.detect_square(5, 1)
+        square_5_1.state = ' '
+        square_5_1.color = ' '
+
+        square_5_5 = game_rook_check.detect_square(5, 5)
+        square_5_5.state = "\u265A"
+        square_5_5.color = 'white'
+
+        square_1_5 = game_rook_check.detect_square(1, 5)
+        square_1_5.state = "\u2656"
+        square_1_5.color = 'black'
+
+        # game_rook_check.display_board
+
+        king = game_rook_check.detect_white_king
+        output = game_rook_check.rook_check(king)
+        expect(output).to eq('check')
+      end
+    end
+
     context 'when the white rook checks the black king' do
       it 'returns check condition for the black king' do
+        square_5_8 = game_rook_check.detect_square(5, 8)
+        square_5_8.state = ' '
+        square_5_8.color = ' '
+
+        square_4_4 = game_rook_check.detect_square(4, 4)
+        square_4_4.state = "\u2654"
+        square_4_4.color = 'black'
+
+        square_1_4 = game_rook_check.detect_square(1, 4)
+        square_1_4.state = "\u265C"
+        square_1_4.color = 'white'
+
+        # game_rook_check.display_board
+
         king = game_rook_check.detect_black_king
         output = game_rook_check.rook_check(king)
         expect(output).to eq('check')
       end
     end
   end
-  
 end
