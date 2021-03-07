@@ -147,6 +147,10 @@ class Game
     start_color == finish_color
   end
 
+  def detect_white_king
+    @board.detect { |s| s.state == ChessBoard.white_pieces[:king] }
+  end
+
   def check_pawn_move(x1, y1, x2, y2)
     # white pawns logic
     if detect_piece(x1, y1) == 'pawn' && detect_color(x1, y1) == 'white'
@@ -315,6 +319,10 @@ class Game
     end
   end
 
+  def check?
+    king = detect_white_king
+  end
+
   def enter_x1
     puts 'Enter x1'
     gets.chomp.to_i
@@ -358,6 +366,6 @@ end
 
 game = Game.new
 game.display_board
-3.times do
+5.times do
   game.play_game
 end

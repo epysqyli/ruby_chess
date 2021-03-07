@@ -125,6 +125,17 @@ describe Game do
     end
   end
 
+  describe '#detect_white_king', :focus => true do
+    subject(:game_white_king) { described_class.new } 
+
+    context 'wherever the white king is' do
+      it 'detects the white king position' do
+        white_king_pos = game_white_king.detect_white_king
+        expect([white_king_pos.state, white_king_pos.color]).to eq(["\u265A", 'white'])
+      end
+    end
+  end
+
   describe "#check_piece_move" do
     subject(:game_piece_move) { described_class.new }
 
