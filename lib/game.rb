@@ -128,13 +128,13 @@ class Game
         path << detect_square(x1, y1)
       end
     end
-
-    path.pop
     path
   end
 
   def free_path?(x1, y1, x2, y2)
-    if detect_path(x1, y1, x2, y2).all? { |square| square.state == ' ' }
+    path = detect_path(x1, y1, x2, y2)
+    path.pop
+    if path.all? { |square| square.state == ' ' }
       true
     else
       false
@@ -326,9 +326,9 @@ class Game
   def check?
   end
 
-  def pawn_check_white
-    x = detect_white_king.x
-    y = detect_white_king.y
+  def pawn_check_white(king)
+    x = king.x
+    y = king.y
     if detect_piece(x + 1, y + 1) == 'pawn' && detect_color(x + 1, y + 1) == 'black'
       'check'
     elsif detect_piece(x - 1, y + 1) == 'pawn' && detect_color(x - 1, y + 1) == 'black'
@@ -338,9 +338,9 @@ class Game
     end
   end
 
-  def pawn_check_black
-    x = detect_black_king.x
-    y = detect_black_king.y
+  def pawn_check_black(king)
+    x = king.x
+    y = king.y
     if detect_piece(x + 1, y - 1) == 'pawn' && detect_color(x + 1, y - 1) == 'white'
       'check'
     elsif detect_piece(x - 1, y - 1) == 'pawn' && detect_color(x - 1, y - 1) == 'white'
@@ -375,6 +375,11 @@ class Game
       end
     end
     return condition
+  end
+
+  def rook_check(king)
+    x = king.x
+    y = king.y
   end
 
   def enter_x1
@@ -418,8 +423,9 @@ class Game
   end
 end
 
-# game = Game.new
+game = Game.new
 # game.display_board
 # 5.times do
 #   game.play_game
 # end
+game.detect_path(1, 1, 5, 1).each { |s| p s }

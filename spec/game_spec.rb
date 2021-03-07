@@ -95,7 +95,7 @@ describe Game do
     end
   end
 
-  describe '#free_path?' do
+  describe '#free_path?', :focus => true do
     subject (:game_free_path) { described_class.new }
 
     it 'returns true when moving from [2, 2] to [2, 6]' do
@@ -265,7 +265,8 @@ describe Game do
         square_3_5.state = "\u2659"
         square_3_5.color = 'black'
 
-        output = game_pawn_check.pawn_check_white
+        king = game_pawn_check.detect_white_king
+        output = game_pawn_check.pawn_check_white(king)
         expect(output).to eq('check')
       end
     end
@@ -292,13 +293,14 @@ describe Game do
         square_3_5.state = "\u265F"
         square_3_5.color = 'white'
 
-        output = game_pawn_check.pawn_check_black
+        king = game_pawn_check.detect_black_king
+        output = game_pawn_check.pawn_check_black(king)
         expect(output).to eq('check')
       end
     end
   end
 
-  describe '#knight_check', :focus => true do
+  describe '#knight_check' do
     subject(:game_knight_check) { described_class.new }
 
     context 'when the white knight checks the black king' do
@@ -316,4 +318,18 @@ describe Game do
       end
     end
   end
+
+
+  describe '#rook_check', :focus => true do
+    subject(:game_rook_check) { described_class.new }
+
+    context 'when the white rook checks the black king' do
+      it 'returns check condition for the black king' do
+        king = game_rook_check.detect_black_king
+        output = game_rook_check.rook_check(king)
+        expect(output).to eq('check')
+      end
+    end
+  end
+  
 end
