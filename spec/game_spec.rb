@@ -150,7 +150,7 @@ describe Game do
       end
     end
 
-    context 'when using a pawn to eat another piece', :focus => true do
+    context 'when using a pawn to eat another piece' do
       it 'cannot eat a black piece directly in front of a white one' do
         game_piece_move.make_move(4, 2, 4, 4)
         game_piece_move.make_move(4, 7, 4, 5)

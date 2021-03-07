@@ -305,46 +305,55 @@ class Game
   def make_move(x1, y1, x2, y2)
     if check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) != 'knight'
       update_square(x1, y1, x2, y2) if free_path?(x1, y1, x2, y2) && !same_color?(x1, y1, x2, y2)
-      # message = 'move made'
     elsif check_move(x1, y1, x2, y2) == 'allowed' && detect_piece(x1, y1) == 'knight'
       update_square(x1, y1, x2, y2) unless same_color?(x1, y1, x2, y2)
-      # message = 'move made'
+    else
+      'invalid move'
     end
-    # puts message
   end
 
   def enter_x1
     puts 'Enter x1'
-    x1 = gets.chomp.to_i
+    gets.chomp.to_i
   end
 
   def enter_y1
     puts 'Enter y1'
-    y1 = gets.chomp.to_i
+    gets.chomp.to_i
   end
 
   def enter_x2
     puts 'Enter x2'
-    x2 = gets.chomp.to_i
+    gets.chomp.to_i
   end
 
   def enter_y2
     puts 'Enter y2'
-    y2 = gets.chomp.to_i
+    gets.chomp.to_i
   end
 
-  def play
+  def play_turn
+    # start position --> scope variable issue
     x1 = enter_x1 until (1..9).include?(x1)
     y1 = enter_y1 until (1..9).include?(y1)
+
+    # final position
     x2 = enter_x2 until (1..9).include?(x2)
     y2 = enter_y2 until (1..9).include?(y2)
+
+    # move application
     make_move(x1, y1, x2, y2)
+
     display_board
+  end
+
+  def play_game
+    play_turn until make_move(x1, y1, x2, y2) != 'invalid move'
   end
 end
 
 game = Game.new
 game.display_board
 3.times do
-  game.play
+  game.play_game
 end
