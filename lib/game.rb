@@ -350,6 +350,33 @@ class Game
     end
   end
 
+  def knight_check(king)
+    x = king.x
+    y = king.y
+    moves = [[x + 2, y + 1], [x + 2, y - 1], [x - 2, y + 1], [x - 2, y - 1], [x + 1, y - 2], [x - 1, y + 2], [x + 1, y + 2], [x - 1, y - 2]]
+    moves.select! { |move| move[0] < 9 && move[1] < 9 }
+    condition = 'nope'
+
+    if king.color == 'black'
+      until condition == 'check' || moves.empty?
+        move = moves.shift
+        p move
+        x = move[0]
+        y = move[1]
+        condition = 'check' if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'white'
+      end
+    elsif king.color == 'white'
+      until condition == 'check' || moves.empty?
+        move = moves.shift
+        p move
+        x = move[0]
+        y = move[1]
+        condition = 'check' if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'black'
+      end
+    end
+    return condition
+  end
+
   def enter_x1
     puts 'Enter x1'
     gets.chomp.to_i
