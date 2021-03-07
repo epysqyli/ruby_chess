@@ -3,6 +3,7 @@ require_relative 'player'
 
 class Game
   attr_accessor :board
+
   @@move_outcome = ''
 
   def initialize
@@ -323,8 +324,7 @@ class Game
     end
   end
 
-  def check?
-  end
+  def check?; end
 
   def pawn_check_white(king)
     x = king.x
@@ -374,15 +374,14 @@ class Game
         condition = 'check' if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'black'
       end
     end
-    return condition
+    condition
   end
 
   def rook_check(king)
     # left path
     left_path = []
     detect_path(king.x, king.y, 1, king.y).each { |s| left_path << s }
-    left_path.each {|s| p s}
-    
+
     # right path
     right_path = []
     detect_path(king.x, king.y, 8, king.y).each { |s| right_path << s }
@@ -390,7 +389,7 @@ class Game
     # up path
     up_path = []
     detect_path(king.x, king.y, king.x, 8).each { |s| up_path << s }
-    
+
     # down path
     down_path = []
     detect_path(king.x, king.y, king.x, 1).each { |s| down_path << s }
@@ -465,7 +464,7 @@ class Game
       end
 
     end
-    return condition
+    condition
   end
 
   def bishop_check(king)
@@ -478,7 +477,7 @@ class Game
       y2 += 1
     end
     detect_path(king.x, king.y, x2, y2).each { |s| nw_path << s }
-    
+
     # ne path
     ne_path = []
     x2 = king.x
@@ -498,7 +497,7 @@ class Game
       y2 -= 1
     end
     detect_path(king.x, king.y, x2, y2).each { |s| sw_path << s }
-    
+
     # se path
     se_path = []
     x2 = king.x
@@ -544,7 +543,7 @@ class Game
         return condition = 'check' if free_path?(king.x, king.y, bishop.x, bishop.y)
       end
 
-    elsif king.color =='black'
+    elsif king.color == 'black'
 
       # nw path
       bishop = nw_path.detect do |square|
@@ -579,7 +578,201 @@ class Game
       end
 
     end
-    return condition
+    condition
+  end
+
+  def queen_check(king)
+    # left path
+    left_path = []
+    detect_path(king.x, king.y, 1, king.y).each { |s| left_path << s }
+
+    # right path
+    right_path = []
+    detect_path(king.x, king.y, 8, king.y).each { |s| right_path << s }
+
+    # up path
+    up_path = []
+    detect_path(king.x, king.y, king.x, 8).each { |s| up_path << s }
+
+    # down path
+    down_path = []
+    detect_path(king.x, king.y, king.x, 1).each { |s| down_path << s }
+
+    # nw path
+    nw_path = []
+    x2 = king.x
+    y2 = king.y
+    until x2 == 8 || y2 == 8
+      x2 += 1
+      y2 += 1
+    end
+    detect_path(king.x, king.y, x2, y2).each { |s| nw_path << s }
+
+    # ne path
+    ne_path = []
+    x2 = king.x
+    y2 = king.y
+    until x2 == 1 || y2 == 8
+      x2 -= 1
+      y2 += 1
+    end
+    detect_path(king.x, king.y, x2, y2).each { |s| ne_path << s }
+
+    # sw path
+    sw_path = []
+    x2 = king.x
+    y2 = king.y
+    until x2 == 1 || y2 == 1
+      x2 -= 1
+      y2 -= 1
+    end
+    detect_path(king.x, king.y, x2, y2).each { |s| sw_path << s }
+
+    # se path
+    se_path = []
+    x2 = king.x
+    y2 = king.y
+    until x2 == 8 || y2 == 1
+      x2 += 1
+      y2 -= 1
+    end
+    detect_path(king.x, king.y, x2, y2).each { |s| se_path << s }
+
+    condition = 'nope'
+
+    if king.color == 'white'
+      # left path
+      queen = left_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # right_path
+      queen = right_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # up path
+      queen = up_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # down path
+      queen = down_path.detect do |square|
+        detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # nw path
+      queen = nw_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # ne path
+      queen = ne_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # se path
+      queen = se_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # sw path
+      queen = sw_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+    elsif king.color == 'black'
+
+      # left path
+      queen = left_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # right_path
+      queen = right_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # up path
+      queen = up_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # down path
+      queen = down_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # nw path
+      queen = nw_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # ne path
+      queen = ne_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # se path
+      queen = se_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+      # sw path
+      queen = sw_path.detect do |square|
+        detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
+      end
+      unless queen.nil?
+        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+      end
+
+    end
+    condition
   end
 
   def enter_x1

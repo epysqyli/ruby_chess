@@ -415,4 +415,28 @@ describe Game do
       end
     end
   end
+
+  describe '#queen_check',:focus => true do
+    subject(:game_queen_check) { described_class.new }
+
+    context 'when the black queen checks the white king' do
+      it 'returns check condition for the white king' do
+        square_5_1 = game_queen_check.detect_square(5, 1)
+        square_5_1.state = ' '
+        square_5_1.color = ' '
+
+        square_6_3 = game_queen_check.detect_square(6, 3)
+        square_6_3.state = "\u265A"
+        square_6_3.color = 'white'
+
+        square_6_6 = game_queen_check.detect_square(6, 6)
+        square_6_6.state = "\u2655"
+        square_6_6.color = 'black'
+
+        king = game_queen_check.detect_white_king
+        output = game_queen_check.queen_check(king)
+        expect(output).to eq('check')
+      end
+    end
+  end
 end
