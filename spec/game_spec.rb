@@ -451,19 +451,45 @@ describe Game do
     end
   end
 
-  describe '#edible?', :focus => true do
-    subject(:game_edible) { described_class.new }
+  describe '#reachable?' do
+    subject(:game_reachable) { described_class.new }
 
     context 'when a piece can be eaten' do
       it 'returns true' do
-        square_3_6 = game_edible.detect_square(3, 6)
+        square_3_6 = game_reachable.detect_square(3, 6)
         square_3_6.state = "\u265D"
         square_3_6.color = 'white'
 
-        game_edible.assign_threat(square_3_6)
+        game_reachable.assign_threat(square_3_6)
 
-        game_edible.display_board
-        output = game_edible.edible?(game_edible.get_threat)
+        game_reachable.display_board
+        output = game_reachable.reachable?(game_reachable.get_threat)
+        expect(output).to be_truthy
+      end
+    end
+  end
+
+  describe '#breakable', :focus => true do
+    subject(:game_breakable) { described_class.new }
+
+    context 'when a piece checks the king' do
+      it 'defines whether a piece of the king color can come in between' do
+
+        square_5_8 = game_breakable.detect_square(5, 8)
+        square_5_8.state = ' '
+        square_5_8.color = ' '
+
+        square_3_6 = game_breakable.detect_square(3, 6)
+        square_3_6.state = "\u2654"
+        square_3_6.color = 'black'
+
+        square_5_4 = game_breakable.detect_square(5, 4)
+        square_5_4.state = "\u265B"
+        square_5_4.color = 'white'
+
+        game_breakable.assign_threat(square_5_4)
+
+        output = game_breakable.breakable?(game_breakable.threat_path)
         expect(output).to be_truthy
       end
     end

@@ -929,7 +929,7 @@ class Game
     moves
   end
 
-  def edible?(get_threat)
+  def reachable?(get_threat)
     if pawn_check(get_threat) == 'check'
       return true
     elsif rook_check(get_threat) == 'check'
@@ -943,6 +943,35 @@ class Game
     else
       return false
     end
+  end
+
+  def threat_path
+    if get_threat.color == 'white'
+      king = detect_black_king
+    else
+      king = detect_white_king
+    end
+
+    x1 = get_threat.x
+    y1 = get_threat.y
+    x2 = king.x
+    y2 = king.y
+
+    detect_path(x1, y1, x2, y2)
+  end
+
+  def breakable?(threat_path)
+    condition = 'nope'
+
+    if get_threat.color == 'white'
+      threat_path.map { |square| square.color = 'white' }
+      condition = true if threat_path.any? { |square| check?(square) == true }
+    elsif get_threat.color == 'black'
+      threat_path.map { |square| square.color = 'black' }
+      condition = true if threat_path.any? { |square| check?(square) == true }
+    end
+
+    return condition
   end
 
   def mate?
