@@ -429,7 +429,7 @@ describe Game do
     end
   end
   
-  describe '#allowed_king_moves', :focus => true do
+  describe '#allowed_king_moves' do
     subject(:game_king_moves) { described_class.new }
 
     context 'when the king is under check' do
@@ -447,6 +447,24 @@ describe Game do
         king = game_king_moves.detect_white_king
         output = game_king_moves.allowed_king_moves(king)
         expect(output.length).to eq(8)
+      end
+    end
+  end
+
+  describe '#edible?', :focus => true do
+    subject(:game_edible) { described_class.new }
+
+    context 'when a piece can be eaten' do
+      it 'returns true' do
+        square_3_6 = game_edible.detect_square(3, 6)
+        square_3_6.state = "\u265D"
+        square_3_6.color = 'white'
+
+        game_edible.assign_threat(square_3_6)
+
+        game_edible.display_board
+        output = game_edible.edible?(game_edible.get_threat)
+        expect(output).to be_truthy
       end
     end
   end

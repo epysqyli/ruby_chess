@@ -15,6 +15,10 @@ class Game
     @@threat_piece = piece
   end
 
+  def get_threat
+    @@threat_piece
+  end
+
   def display_board
     # row 8
     puts "\n\t| #{@board[56].state} | #{@board[57].state} | #{@board[58].state} | #{@board[59].state} | #{@board[60].state} | #{@board[61].state} | #{@board[62].state} | #{@board[63].state} |"
@@ -324,7 +328,8 @@ class Game
       puts 'invalid move'
     end
   end
-
+  ###########################
+  # king check section begins
   def pawn_check(king)
     x = king.x
     y = king.y
@@ -902,6 +907,8 @@ class Game
       return false
     end
   end
+  # king check section ends
+  ##########################
 
   def allowed_king_moves(king)
     x = king.x
@@ -922,8 +929,23 @@ class Game
     moves
   end
 
-  def eat_threatening_piece?
-    
+  def edible?(get_threat)
+    if pawn_check(get_threat) == 'check'
+      return true
+    elsif rook_check(get_threat) == 'check'
+      return true
+    elsif knight_check(get_threat) == 'check'
+      return true
+    elsif bishop_check(get_threat) == 'check'
+      return true
+    elsif queen_check(get_threat) == 'check'
+      return true
+    else
+      return false
+    end
+  end
+
+  def mate?
   end
 
   def enter_x1

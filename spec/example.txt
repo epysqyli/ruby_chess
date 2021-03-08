@@ -38,3 +38,4 @@ example_id                    | status  | run_time        |
 ./spec/game_spec.rb[1:15:1:1] | passed  | 0.00195 seconds |
 ./spec/game_spec.rb[1:16:1:1] | passed  | 0.00608 seconds |
 ./spec/game_spec.rb[1:17:1:1] | passed  | 0.00179 seconds |
+./spec/game_spec.rb[1:18:1:1] | passed  | 0.00192 seconds |
