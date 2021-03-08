@@ -143,7 +143,10 @@ class Game
   def free_path?(x1, y1, x2, y2)
     path = detect_path(x1, y1, x2, y2)
     path.pop
-    if path.all? { |square| square.state == ' ' }
+
+    if path.empty?
+      true
+    elsif path.all? { |square| square.state == ' ' }
       true
     else
       false
@@ -403,26 +406,22 @@ class Game
   end
 
   def rook_check(king)
-    # left path
     left_path = []
     detect_path(king.x, king.y, 1, king.y).each { |s| left_path << s }
 
-    # right path
     right_path = []
     detect_path(king.x, king.y, 8, king.y).each { |s| right_path << s }
 
-    # up path
     up_path = []
     detect_path(king.x, king.y, king.x, 8).each { |s| up_path << s }
 
-    # down path
     down_path = []
     detect_path(king.x, king.y, king.x, 1).each { |s| down_path << s }
 
     condition = 'nope'
 
     if king.color == 'white'
-      # left path
+      
       rook = left_path.detect do |square|
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
       end
@@ -433,7 +432,6 @@ class Game
         end
       end
 
-      # right_path
       rook = right_path.detect do |square|
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
       end
@@ -444,7 +442,6 @@ class Game
         end
       end
 
-      # up path
       rook = up_path.detect do |square|
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
       end
@@ -455,7 +452,6 @@ class Game
         end
       end
 
-      # down path
       rook = down_path.detect do |square|
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
       end
@@ -468,7 +464,6 @@ class Game
 
     elsif king.color == 'black'
 
-      # left path
       rook = left_path.detect do |square|
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
       end
@@ -479,7 +474,6 @@ class Game
         end
       end
 
-      # right_path
       rook = right_path.detect do |square|
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
       end
@@ -489,7 +483,7 @@ class Game
           assign_threat(rook)
         end
       end
-      # up path
+
       rook = up_path.detect do |square|
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
       end
@@ -500,7 +494,6 @@ class Game
         end
       end
 
-      # down path
       rook = down_path.detect do |square|
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
       end
@@ -516,7 +509,6 @@ class Game
   end
 
   def bishop_check(king)
-    # nw path
     nw_path = []
     x2 = king.x
     y2 = king.y
@@ -526,7 +518,6 @@ class Game
     end
     detect_path(king.x, king.y, x2, y2).each { |s| nw_path << s }
 
-    # ne path
     ne_path = []
     x2 = king.x
     y2 = king.y
@@ -536,7 +527,6 @@ class Game
     end
     detect_path(king.x, king.y, x2, y2).each { |s| ne_path << s }
 
-    # sw path
     sw_path = []
     x2 = king.x
     y2 = king.y
@@ -546,7 +536,6 @@ class Game
     end
     detect_path(king.x, king.y, x2, y2).each { |s| sw_path << s }
 
-    # se path
     se_path = []
     x2 = king.x
     y2 = king.y
@@ -654,23 +643,18 @@ class Game
   end
 
   def queen_check(king)
-    # left path
     left_path = []
     detect_path(king.x, king.y, 1, king.y).each { |s| left_path << s }
 
-    # right path
     right_path = []
     detect_path(king.x, king.y, 8, king.y).each { |s| right_path << s }
 
-    # up path
     up_path = []
     detect_path(king.x, king.y, king.x, 8).each { |s| up_path << s }
 
-    # down path
     down_path = []
     detect_path(king.x, king.y, king.x, 1).each { |s| down_path << s }
 
-    # nw path
     nw_path = []
     x2 = king.x
     y2 = king.y
@@ -680,7 +664,6 @@ class Game
     end
     detect_path(king.x, king.y, x2, y2).each { |s| nw_path << s }
 
-    # ne path
     ne_path = []
     x2 = king.x
     y2 = king.y
@@ -690,7 +673,6 @@ class Game
     end
     detect_path(king.x, king.y, x2, y2).each { |s| ne_path << s }
 
-    # sw path
     sw_path = []
     x2 = king.x
     y2 = king.y
@@ -700,7 +682,6 @@ class Game
     end
     detect_path(king.x, king.y, x2, y2).each { |s| sw_path << s }
 
-    # se path
     se_path = []
     x2 = king.x
     y2 = king.y
@@ -925,6 +906,7 @@ class Game
       end
 
       # select away also those squares that are reached by enemy pieces
+      # where the king could otherwise potentially move to
       # need to specify which color these squares would be based on the king color
       unless moves.empty?
         moves.map! do |move|
@@ -932,6 +914,7 @@ class Game
           square.color = 'white'
           square
         end
+        # select away those squares that are under threat, hence reachable by the enemy pieces
         moves.select! { |square| reachable?(square) == false }
       end
 
@@ -951,71 +934,44 @@ class Game
     moves
   end
 
-  def reachable?(get_threat)
-    if pawn_check(get_threat) == 'check'
+  def reachable?(square)
+    if pawn_check(square) == 'check'
       true
-    elsif rook_check(get_threat) == 'check'
+    elsif rook_check(square) == 'check'
       true
-    elsif knight_check(get_threat) == 'check'
+    elsif knight_check(square) == 'check'
       true
-    elsif bishop_check(get_threat) == 'check'
+    elsif bishop_check(square) == 'check'
       true
-    elsif queen_check(get_threat) == 'check'
+    elsif queen_check(square) == 'check'
       true
     else
       false
     end
   end
 
-  def threat_path
-    king = if get_threat.color == 'white'
-             detect_black_king
-           else
-             detect_white_king
-           end
-
-    x1 = get_threat.x
-    y1 = get_threat.y
+  def breakable?(king, square)
+    x1 = square.x
+    y1 = square.y
     x2 = king.x
     y2 = king.y
 
-    detect_path(x1, y1, x2, y2)
-  end
+    threat_path = detect_path(x1, y1, x2, y2)
 
-  def breakable?(threat_path)
     condition = false
 
-    if get_threat.color == 'white'
-      threat_path.map { |square| square.color = 'white' }
-      condition = true if threat_path.any? { |square| check?(square) == true }
-    elsif get_threat.color == 'black'
-      threat_path.map { |square| square.color = 'black' }
-      condition = true if threat_path.any? { |square| check?(square) == true }
+    if threat_path.length > 1 
+      if square.color == 'white'
+        threat_path.map { |square| square.color = 'white' if detect_piece(square.x, square.y) != 'king'}
+        p threat_path
+        condition = true if threat_path.any? { |square| reachable?(square) == true }
+      elsif square.color == 'black'
+        threat_path.map { |square| square.color = 'black'  if detect_piece(square.x, square.y) != 'king'}
+        condition = true if threat_path.any? { |square| reachable?(square) == true }
+      end
     end
 
     condition
-  end
-
-  def mate?(king)
-    condition = false
-    unless get_threat.nil?
-      if get_threat.state != 'knight'
-        if allowed_king_moves(king).empty? && !reachable?(get_threat) && !breakable?
-          puts 'CHESS MATE'
-          condition = true
-        else
-          condition = false
-        end
-      elsif get_threat.state == 'knight'
-        if allowed_king_moves(king).empty? && !reachable?(get_threat)
-          puts 'CHESS MATE'
-          condition = true
-        else
-          condition = false
-        end
-      end
-    end
-    return condition
   end
 
   def enter_x1

@@ -93,6 +93,13 @@ describe Game do
         expect(output.length).to eq(2)
       end
     end
+
+    context 'when moving a piece by one square' do
+      it 'returns an array with one square' do
+        path = game_path.detect_path(4, 4, 5, 5)
+        expect(path.length).to eq(1)
+      end
+    end
   end
 
   describe '#free_path?' do
@@ -106,6 +113,11 @@ describe Game do
     it 'returns false when moving from [2, 2] to [6, 2]' do
       output = game_free_path.free_path?(2, 2, 6, 2)
       expect(output).to be_falsy
+    end
+
+    it 'returns true when detecting from [4, 4] to [5, 5]' do
+      output = game_free_path.free_path?(4, 4, 5, 5)
+      expect(output).to be_truthy
     end
   end
 
@@ -432,8 +444,8 @@ describe Game do
   describe '#allowed_king_moves' do
     subject(:game_king_moves) { described_class.new }
 
-    context 'when the king is under check' do
-      it 'returns which squares can the king move to' do
+    context 'wherever the king is located' do
+      xit 'returns which squares can the king move to' do
         square_5_1 = game_king_moves.detect_square(5, 1)
         square_5_1.state = ' '
         square_5_1.color = ' '
@@ -446,16 +458,42 @@ describe Game do
 
         king = game_king_moves.detect_white_king
         output = game_king_moves.allowed_king_moves(king)
+        output.each { |s| p s }
         expect(output.length).to eq(5)
+      end
+    end
+
+    context 'wherever the king is located' do
+      it 'returns which squares can the king move to' do
+        square_5_1 = game_king_moves.detect_square(5, 1)
+        square_5_1.state = ' '
+        square_5_1.color = ' '
+
+        square_5_5 = game_king_moves.detect_square(5, 5)
+        square_5_5.state = "\u265A"
+        square_5_5.color = 'white'
+
+        square_2_4 = game_king_moves.detect_square(2, 4)
+        square_2_4.state = "\u2658"
+        square_2_4.color = 'black'
+
+        game_king_moves.make_move(7, 7, 7, 6)
+
+        game_king_moves.display_board
+
+        king = game_king_moves.detect_white_king
+        output = game_king_moves.allowed_king_moves(king)
+        output.each { |s| p s }
+        expect(output.length).to eq(3)
       end
     end
   end
 
-  describe '#reachable?', :focus => true do
+  describe '#reachable?' do
     subject(:game_reachable) { described_class.new }
 
     context 'when a piece can be eaten' do
-      it 'returns true' do
+      it 'returns true for a bishop under threat by pawns' do
         square_3_6 = game_reachable.detect_square(3, 6)
         square_3_6.state = "\u265D"
         square_3_6.color = 'white'
@@ -464,6 +502,18 @@ describe Game do
 
         game_reachable.display_board
         output = game_reachable.reachable?(game_reachable.get_threat)
+        expect(output).to be_truthy
+      end
+
+      it 'returns true for a queen under threat by a knight' do
+        game_reachable.make_move(5, 2, 5, 3)
+        game_reachable.make_move(7, 8, 6, 6)
+        game_reachable.make_move(4, 1, 7, 4)
+
+        square_7_4 = game_reachable.detect_square(7, 4)
+
+        game_reachable.display_board
+        output = game_reachable.reachable?(square_7_4)
         expect(output).to be_truthy
       end
 
@@ -497,7 +547,7 @@ describe Game do
     end
   end
 
-  describe '#breakable' do
+  describe '#breakable', :focus => true  do
     subject(:game_breakable) { described_class.new }
 
     context 'when a piece checks the king' do
@@ -515,49 +565,10 @@ describe Game do
         square_5_4.state = "\u265B"
         square_5_4.color = 'white'
 
-        game_breakable.assign_threat(square_5_4)
+        game_breakable.display_board
+        king = game_breakable.detect_black_king
 
-        output = game_breakable.breakable?(game_breakable.threat_path)
-        expect(output).to be_truthy
-      end
-    end
-  end
-
-  describe '@mate?' do
-    subject(:game_mate) { described_class.new }
-    
-    context 'when the black king is chess mate' do
-      xit 'returns the correct condition' do
-        square_1_8 = game_mate.detect_square(1, 8)
-        square_1_8.state = "\u2654"
-        square_1_8.color = 'black'
-
-        square_5_8 = game_mate.detect_square(5, 8)
-        square_5_8.state = ' '
-        square_5_8.color = ' '
-
-        square_2_7 = game_mate.detect_square(2, 7)
-        square_2_7.state = "\u265B"
-        square_2_7.color = 'white'
-
-        square_2_3 = game_mate.detect_square(2, 3)
-        square_2_3.state = "\u265C"
-        square_2_3.color = 'white'
-
-        square_3_8 = game_mate.detect_square(3, 8)
-        square_3_8.state = ' '
-        square_3_8.color = ' '
-
-        king = game_mate.detect_black_king
-        game_mate.display_board
-
-        #without going through check? no threat_piece is assigned
-        game_mate.assign_threat(square_2_7)
-        p game_mate.get_threat
-        p game_mate.allowed_king_moves(king)
-        p game_mate.reachable?(game_mate.get_threat)
-
-        output = game_mate.mate?(king)
+        output = game_breakable.breakable?(square_3_6, square_5_4)
         expect(output).to be_truthy
       end
     end
