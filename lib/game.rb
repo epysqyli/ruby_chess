@@ -3,11 +3,16 @@ require_relative 'player'
 
 class Game
   attr_accessor :board
+  @@threat_piece = nil
 
   def initialize
     @board = ChessBoard.new.board
     @white = Player.new('white')
     @black = Player.new('black')
+  end
+
+  def assign_threat(piece)
+    @@threat_piece = piece
   end
 
   def display_board
@@ -333,7 +338,10 @@ class Game
         move = moves.shift
         x = move[0]
         y = move[1]
-        condition = 'check' if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'black'
+        if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'black'
+          condition = 'check' 
+          assign_threat(detect_square(x, y))
+        end
       end
 
     elsif king.color == 'black'
@@ -344,7 +352,10 @@ class Game
         move = moves.shift
         x = move[0]
         y = move[1]
-        condition = 'check' if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'white'
+        if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'white'
+          condition = 'check' 
+          assign_threat(detect_square(x, y))
+        end
       end
     end
     return condition
@@ -363,7 +374,10 @@ class Game
         move = moves.shift
         x = move[0]
         y = move[1]
-        condition = 'check' if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'white'
+        if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'white'
+          condition = 'check' 
+          assign_threat(detect_square(x, y))
+        end
       end
 
     elsif king.color == 'white'
@@ -371,7 +385,10 @@ class Game
         move = moves.shift
         x = move[0]
         y = move[1]
-        condition = 'check' if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'black'
+        if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'black'
+          condition = 'check' 
+          assign_threat(detect_square(x, y))
+        end
       end
     end
 
@@ -403,7 +420,10 @@ class Game
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
       end
       unless rook.nil?
-        return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+        if free_path?(king.x, king.y, rook.x, rook.y)
+          condition = 'check' 
+          assign_threat(rook)
+        end
       end
 
       # right_path
@@ -411,7 +431,10 @@ class Game
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
       end
       unless rook.nil?
-        return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+        if free_path?(king.x, king.y, rook.x, rook.y)
+          condition = 'check' 
+          assign_threat(rook)
+        end
       end
 
       # up path
@@ -419,7 +442,10 @@ class Game
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
       end
       unless rook.nil?
-        return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+        if free_path?(king.x, king.y, rook.x, rook.y)
+          condition = 'check' 
+          assign_threat(rook)
+        end
       end
 
       # down path
@@ -427,7 +453,10 @@ class Game
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
       end
       unless rook.nil?
-        return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+        if free_path?(king.x, king.y, rook.x, rook.y)
+          condition = 'check' 
+          assign_threat(rook)
+        end
       end
 
     elsif king.color == 'black'
@@ -437,7 +466,10 @@ class Game
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
       end
       unless rook.nil?
-        return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+        if free_path?(king.x, king.y, rook.x, rook.y)
+          condition = 'check' 
+          assign_threat(rook)
+        end
       end
 
       # right_path
@@ -445,15 +477,20 @@ class Game
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
       end
       unless rook.nil?
-        return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+        if free_path?(king.x, king.y, rook.x, rook.y)
+          condition = 'check' 
+          assign_threat(rook)
+        end
       end
-
       # up path
       rook = up_path.detect do |square|
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
       end
       unless rook.nil?
-        return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+        if free_path?(king.x, king.y, rook.x, rook.y)
+          condition = 'check'
+          assign_threat(rook)
+        end
       end
 
       # down path
@@ -461,7 +498,10 @@ class Game
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'white'
       end
       unless rook.nil?
-        return condition = 'check' if free_path?(king.x, king.y, rook.x, rook.y)
+        if free_path?(king.x, king.y, rook.x, rook.y)
+          condition = 'check' 
+          assign_threat(rook)
+        end
       end
 
     end
@@ -517,7 +557,10 @@ class Game
         detect_piece(square.x, square.y) == 'bishop' && detect_color(square.x, square.y) == 'black'
       end
       unless bishop.nil?
-        return condition = 'check' if free_path?(king.x, king.y, bishop.x, bishop.y)
+        if free_path?(king.x, king.y, bishop.x, bishop.y)
+          condition = 'check' 
+          assign_threat(bishop)
+        end
       end
 
       # ne path
@@ -525,7 +568,10 @@ class Game
         detect_piece(square.x, square.y) == 'bishop' && detect_color(square.x, square.y) == 'black'
       end
       unless bishop.nil?
-        return condition = 'check' if free_path?(king.x, king.y, bishop.x, bishop.y)
+        if free_path?(king.x, king.y, bishop.x, bishop.y)
+          condition = 'check' 
+          assign_threat(bishop)
+        end
       end
 
       # se path
@@ -533,7 +579,10 @@ class Game
         detect_piece(square.x, square.y) == 'bishop' && detect_color(square.x, square.y) == 'black'
       end
       unless bishop.nil?
-        return condition = 'check' if free_path?(king.x, king.y, bishop.x, bishop.y)
+        if free_path?(king.x, king.y, bishop.x, bishop.y)
+          condition = 'check' 
+          assign_threat(bishop)
+        end
       end
 
       # sw path
@@ -541,7 +590,10 @@ class Game
         detect_piece(square.x, square.y) == 'bishop' && detect_color(square.x, square.y) == 'black'
       end
       unless bishop.nil?
-        return condition = 'check' if free_path?(king.x, king.y, bishop.x, bishop.y)
+        if free_path?(king.x, king.y, bishop.x, bishop.y)
+          condition = 'check'
+          assign_threat(bishop)
+        end
       end
 
     elsif king.color == 'black'
@@ -551,7 +603,10 @@ class Game
         detect_piece(square.x, square.y) == 'bishop' && detect_color(square.x, square.y) == 'white'
       end
       unless bishop.nil?
-        return condition = 'check' if free_path?(king.x, king.y, bishop.x, bishop.y)
+        if free_path?(king.x, king.y, bishop.x, bishop.y)
+          condition = 'check' 
+          assign_threat(bishop)
+        end
       end
 
       # ne path
@@ -559,7 +614,10 @@ class Game
         detect_piece(square.x, square.y) == 'bishop' && detect_color(square.x, square.y) == 'white'
       end
       unless bishop.nil?
-        return condition = 'check' if free_path?(king.x, king.y, bishop.x, bishop.y)
+        if free_path?(king.x, king.y, bishop.x, bishop.y)
+          condition = 'check' 
+          assign_threat(bishop)
+        end
       end
 
       # se path
@@ -567,7 +625,10 @@ class Game
         detect_piece(square.x, square.y) == 'bishop' && detect_color(square.x, square.y) == 'white'
       end
       unless bishop.nil?
-        return condition = 'check' if free_path?(king.x, king.y, bishop.x, bishop.y)
+        if free_path?(king.x, king.y, bishop.x, bishop.y)
+          condition = 'check' 
+          assign_threat(bishop)
+        end
       end
 
       # sw path
@@ -575,10 +636,13 @@ class Game
         detect_piece(square.x, square.y) == 'bishop' && detect_color(square.x, square.y) == 'white'
       end
       unless bishop.nil?
-        return condition = 'check' if free_path?(king.x, king.y, bishop.x, bishop.y)
+        if free_path?(king.x, king.y, bishop.x, bishop.y)
+          condition = 'check' 
+          assign_threat(bishop)
+        end
       end
-
     end
+
     condition
   end
 
@@ -647,7 +711,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # right_path
@@ -655,7 +722,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # up path
@@ -663,7 +733,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # down path
@@ -671,7 +744,10 @@ class Game
         detect_piece(square.x, square.y) == 'rook' && detect_color(square.x, square.y) == 'black'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # nw path
@@ -679,7 +755,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # ne path
@@ -687,7 +766,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # se path
@@ -695,7 +777,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # sw path
@@ -703,7 +788,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'black'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
     elsif king.color == 'black'
@@ -713,7 +801,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # right_path
@@ -721,7 +812,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # up path
@@ -729,7 +823,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # down path
@@ -737,15 +834,20 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
-
       # nw path
       queen = nw_path.detect do |square|
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # ne path
@@ -753,7 +855,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # se path
@@ -761,7 +866,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
       # sw path
@@ -769,7 +877,10 @@ class Game
         detect_piece(square.x, square.y) == 'queen' && detect_color(square.x, square.y) == 'white'
       end
       unless queen.nil?
-        return condition = 'check' if free_path?(king.x, king.y, queen.x, queen.y)
+        if free_path?(king.x, king.y, queen.x, queen.y)
+          condition = 'check' 
+          assign_threat(queen)
+        end
       end
 
     end
@@ -811,6 +922,10 @@ class Game
     moves
   end
 
+  def eat_threatening_piece?
+    
+  end
+
   def enter_x1
     puts 'Enter x1'
     gets.chomp.to_i
@@ -841,6 +956,7 @@ class Game
     make_move(x1, y1, x2, y2)
     if check?(detect_black_king) == true
       puts "\tcheck"
+      p @@threat_piece
     else
       puts "\tno check"
     end
@@ -858,6 +974,7 @@ class Game
     make_move(x1, y1, x2, y2)
     if check?(detect_white_king) == true
       puts "\tcheck"
+      p @@threat_piece
     else
       puts "\tno check"
     end
@@ -866,7 +983,7 @@ class Game
   end
 
   def play
-    play_turn_white
+    play_turn_white   
     play_turn_black
   end
 end
