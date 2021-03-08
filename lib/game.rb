@@ -320,30 +320,34 @@ class Game
     end
   end
 
-  def pawn_check_white(king)
+  def pawn_check(king)
     x = king.x
     y = king.y
-    # one or more of the transformations can be nil because out of the board
-    if detect_piece(x + 1, y + 1) == 'pawn' && detect_color(x + 1, y + 1) == 'black'
-      'check'
-    elsif detect_piece(x - 1, y + 1) == 'pawn' && detect_color(x - 1, y + 1) == 'black'
-      'check'
-    else
-      'nope'
-    end
-  end
+    condition = 'nope'
 
-  def pawn_check_black(king)
-    x = king.x
-    y = king.y
-    # one or more of the transformations can be nil because out of the board
-    if detect_piece(x + 1, y - 1) == 'pawn' && detect_color(x + 1, y - 1) == 'white'
-      'check'
-    elsif detect_piece(x - 1, y - 1) == 'pawn' && detect_color(x - 1, y - 1) == 'white'
-      'check'
-    else
-      'nope'
+    if king.color == 'white'
+      moves = [[x + 1, y + 1], [x - 1, y + 1]]
+      moves.select! { |move| move[0] < 9 && move[1] < 9 }
+      moves.select! { |move| move[0] > 0 && move[1] > 0 }
+      until condition == 'check' || moves.empty?
+        move = moves.shift
+        x = move[0]
+        y = move[1]
+        condition = 'check' if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'black'
+      end
+
+    elsif king.color == 'black'
+      moves = [[x + 1, y - 1], [x - 1, y - 1]]
+      moves.select! { |move| move[0] < 9 && move[1] < 9 }
+      moves.select! { |move| move[0] > 0 && move[1] > 0 }
+      until condition == 'check' || moves.empty?
+        move = moves.shift
+        x = move[0]
+        y = move[1]
+        condition = 'check' if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'white'
+      end
     end
+    return condition
   end
 
   def knight_check(king)
@@ -356,20 +360,20 @@ class Game
     if king.color == 'black'
       until condition == 'check' || moves.empty?
         move = moves.shift
-        p move
         x = move[0]
         y = move[1]
         condition = 'check' if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'white'
       end
+
     elsif king.color == 'white'
       until condition == 'check' || moves.empty?
         move = moves.shift
-        p move
         x = move[0]
         y = move[1]
         condition = 'check' if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'black'
       end
     end
+
     condition
   end
 
@@ -772,21 +776,20 @@ class Game
   end
 
   # based on player turn: king = detect white or black king
+  # rewrite pawn_check as a single method
   def check?(king)
-    if king.color == 'black'
-      true if pawn_check_black(king) == 'check'      
-    elsif king.color == 'white'
-      true if pawn_check_white(king) == 'check'
+    if pawn_check(king) == 'check'
+      return true
     elsif rook_check(king) == 'check'
-      true
+      return true
     elsif knight_check(king) == 'check'
-      true
+      return true
     elsif bishop_check(king) == 'check'
-      true
-    elsif check_queen_move(king) == 'check'
-      true
+      return true
+    elsif queen_check(king) == 'check'
+      return true
     else
-      false
+      return false
     end
   end
 
@@ -811,6 +814,7 @@ class Game
   end
 
   def play_turn_white
+    puts "\nWHITE TURN"
     x1 = enter_x1 until (1..9).include?(x1)
     y1 = enter_y1 until (1..9).include?(y1)
     x2 = enter_x2 until (1..9).include?(x2)
@@ -823,6 +827,7 @@ class Game
   end
 
   def play_turn_black
+    puts "\nBLACK TURN"
     x1 = enter_x1 until (1..9).include?(x1)
     y1 = enter_y1 until (1..9).include?(y1)
     x2 = enter_x2 until (1..9).include?(x2)
@@ -840,6 +845,6 @@ class Game
   end
 end
 
-game = Game.new
-game.display_board
-game.play_turn_white while true
+# game = Game.new
+# game.display_board
+# game.play_turn_white
