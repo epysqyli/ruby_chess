@@ -3,6 +3,7 @@ require_relative 'player'
 
 class Game
   attr_accessor :board
+
   @@threat_piece = nil
 
   def initialize
@@ -328,6 +329,7 @@ class Game
       puts 'invalid move'
     end
   end
+
   ###########################
   # king check section begins
   def pawn_check(king)
@@ -344,7 +346,7 @@ class Game
         x = move[0]
         y = move[1]
         if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'black'
-          condition = 'check' 
+          condition = 'check'
           assign_threat(detect_square(x, y))
         end
       end
@@ -358,12 +360,12 @@ class Game
         x = move[0]
         y = move[1]
         if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'white'
-          condition = 'check' 
+          condition = 'check'
           assign_threat(detect_square(x, y))
         end
       end
     end
-    return condition
+    condition
   end
 
   def knight_check(king)
@@ -380,7 +382,7 @@ class Game
         x = move[0]
         y = move[1]
         if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'white'
-          condition = 'check' 
+          condition = 'check'
           assign_threat(detect_square(x, y))
         end
       end
@@ -391,7 +393,7 @@ class Game
         x = move[0]
         y = move[1]
         if detect_piece(x, y) == 'knight' && detect_color(x, y) == 'black'
-          condition = 'check' 
+          condition = 'check'
           assign_threat(detect_square(x, y))
         end
       end
@@ -426,7 +428,7 @@ class Game
       end
       unless rook.nil?
         if free_path?(king.x, king.y, rook.x, rook.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(rook)
         end
       end
@@ -437,7 +439,7 @@ class Game
       end
       unless rook.nil?
         if free_path?(king.x, king.y, rook.x, rook.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(rook)
         end
       end
@@ -448,7 +450,7 @@ class Game
       end
       unless rook.nil?
         if free_path?(king.x, king.y, rook.x, rook.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(rook)
         end
       end
@@ -459,7 +461,7 @@ class Game
       end
       unless rook.nil?
         if free_path?(king.x, king.y, rook.x, rook.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(rook)
         end
       end
@@ -472,7 +474,7 @@ class Game
       end
       unless rook.nil?
         if free_path?(king.x, king.y, rook.x, rook.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(rook)
         end
       end
@@ -483,7 +485,7 @@ class Game
       end
       unless rook.nil?
         if free_path?(king.x, king.y, rook.x, rook.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(rook)
         end
       end
@@ -504,7 +506,7 @@ class Game
       end
       unless rook.nil?
         if free_path?(king.x, king.y, rook.x, rook.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(rook)
         end
       end
@@ -563,7 +565,7 @@ class Game
       end
       unless bishop.nil?
         if free_path?(king.x, king.y, bishop.x, bishop.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(bishop)
         end
       end
@@ -574,7 +576,7 @@ class Game
       end
       unless bishop.nil?
         if free_path?(king.x, king.y, bishop.x, bishop.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(bishop)
         end
       end
@@ -585,7 +587,7 @@ class Game
       end
       unless bishop.nil?
         if free_path?(king.x, king.y, bishop.x, bishop.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(bishop)
         end
       end
@@ -609,7 +611,7 @@ class Game
       end
       unless bishop.nil?
         if free_path?(king.x, king.y, bishop.x, bishop.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(bishop)
         end
       end
@@ -620,7 +622,7 @@ class Game
       end
       unless bishop.nil?
         if free_path?(king.x, king.y, bishop.x, bishop.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(bishop)
         end
       end
@@ -631,7 +633,7 @@ class Game
       end
       unless bishop.nil?
         if free_path?(king.x, king.y, bishop.x, bishop.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(bishop)
         end
       end
@@ -642,7 +644,7 @@ class Game
       end
       unless bishop.nil?
         if free_path?(king.x, king.y, bishop.x, bishop.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(bishop)
         end
       end
@@ -717,7 +719,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -728,7 +730,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -739,7 +741,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -750,7 +752,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -761,7 +763,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -772,7 +774,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -783,7 +785,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -794,7 +796,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -807,7 +809,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -818,7 +820,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -829,7 +831,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -840,7 +842,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -850,7 +852,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -861,7 +863,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -872,7 +874,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -883,7 +885,7 @@ class Game
       end
       unless queen.nil?
         if free_path?(king.x, king.y, queen.x, queen.y)
-          condition = 'check' 
+          condition = 'check'
           assign_threat(queen)
         end
       end
@@ -894,17 +896,17 @@ class Game
 
   def check?(king)
     if pawn_check(king) == 'check'
-      return true
+      true
     elsif rook_check(king) == 'check'
-      return true
+      true
     elsif knight_check(king) == 'check'
-      return true
+      true
     elsif bishop_check(king) == 'check'
-      return true
+      true
     elsif queen_check(king) == 'check'
-      return true
+      true
     else
-      return false
+      false
     end
   end
   # king check section ends
@@ -913,12 +915,12 @@ class Game
   def allowed_king_moves(king)
     x = king.x
     y = king.y
-    moves = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1], [x + 1, y + 1], [x + 1, y - 1], [x - 1, y - 1], [x -1, y + 1]]
+    moves = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1], [x + 1, y + 1], [x + 1, y - 1], [x - 1, y - 1], [x - 1, y + 1]]
     moves.select! { |move| move[0] < 9 && move[1] < 9 }
     moves.select! { |move| move[0] > 0 && move[1] > 0 }
 
     if king.color == 'white'
-      moves.select! do |move| 
+      moves.select! do |move|
         detect_piece(move[0], move[1]) == ' ' || detect_color(move[0], move[1]) == 'black'
       end
 
@@ -934,7 +936,7 @@ class Game
       end
 
     elsif king.color == 'black'
-      moves.select! do |move| 
+      moves.select! do |move|
         detect_piece(move[0], move[1]) == ' ' || detect_color(move[0], move[1]) == 'white'
       end
       unless moves.empty?
@@ -951,26 +953,26 @@ class Game
 
   def reachable?(get_threat)
     if pawn_check(get_threat) == 'check'
-      return true
+      true
     elsif rook_check(get_threat) == 'check'
-      return true
+      true
     elsif knight_check(get_threat) == 'check'
-      return true
+      true
     elsif bishop_check(get_threat) == 'check'
-      return true
+      true
     elsif queen_check(get_threat) == 'check'
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
   def threat_path
-    if get_threat.color == 'white'
-      king = detect_black_king
-    else
-      king = detect_white_king
-    end
+    king = if get_threat.color == 'white'
+             detect_black_king
+           else
+             detect_white_king
+           end
 
     x1 = get_threat.x
     y1 = get_threat.y
@@ -981,7 +983,7 @@ class Game
   end
 
   def breakable?(threat_path)
-    condition = 'nope'
+    condition = false
 
     if get_threat.color == 'white'
       threat_path.map { |square| square.color = 'white' }
@@ -991,11 +993,29 @@ class Game
       condition = true if threat_path.any? { |square| check?(square) == true }
     end
 
-    return condition
+    condition
   end
 
-  def mate?
-
+  def mate?(king)
+    condition = false
+    unless get_threat.nil?
+      if get_threat.state != 'knight'
+        if allowed_king_moves(king).empty? && !reachable?(get_threat) && !breakable?
+          puts 'CHESS MATE'
+          condition = true
+        else
+          condition = false
+        end
+      elsif get_threat.state == 'knight'
+        if allowed_king_moves(king).empty? && !reachable?(get_threat)
+          puts 'CHESS MATE'
+          condition = true
+        else
+          condition = false
+        end
+      end
+    end
+    return condition
   end
 
   def enter_x1
@@ -1055,7 +1075,7 @@ class Game
   end
 
   def play
-    play_turn_white   
+    play_turn_white
     play_turn_black
   end
 end
