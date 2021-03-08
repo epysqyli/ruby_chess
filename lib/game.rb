@@ -921,9 +921,29 @@ class Game
       moves.select! do |move| 
         detect_piece(move[0], move[1]) == ' ' || detect_color(move[0], move[1]) == 'black'
       end
+
+      # select away also those squares that are reached by enemy pieces
+      # need to specify which color these squares would be based on the king color
+      unless moves.empty?
+        moves.map! do |move|
+          square = detect_square(move[0], move[1])
+          square.color = 'white'
+          square
+        end
+        moves.select! { |square| reachable?(square) == false }
+      end
+
     elsif king.color == 'black'
       moves.select! do |move| 
         detect_piece(move[0], move[1]) == ' ' || detect_color(move[0], move[1]) == 'white'
+      end
+      unless moves.empty?
+        moves.map! do |move|
+          square = detect_square(move[0], move[1])
+          square.color = 'black'
+          square
+        end
+        moves.select! { |square| reachable?(square) == false }
       end
     end
     moves
@@ -975,6 +995,7 @@ class Game
   end
 
   def mate?
+
   end
 
   def enter_x1

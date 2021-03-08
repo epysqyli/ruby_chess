@@ -429,7 +429,7 @@ describe Game do
     end
   end
   
-  describe '#allowed_king_moves' do
+  describe '#allowed_king_moves', :focus => true do
     subject(:game_king_moves) { described_class.new }
 
     context 'when the king is under check' do
@@ -446,7 +446,7 @@ describe Game do
 
         king = game_king_moves.detect_white_king
         output = game_king_moves.allowed_king_moves(king)
-        expect(output.length).to eq(8)
+        expect(output.length).to eq(5)
       end
     end
   end
@@ -469,7 +469,7 @@ describe Game do
     end
   end
 
-  describe '#breakable', :focus => true do
+  describe '#breakable' do
     subject(:game_breakable) { described_class.new }
 
     context 'when a piece checks the king' do
