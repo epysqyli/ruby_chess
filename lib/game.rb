@@ -355,6 +355,7 @@ class Game
     y = king.y
     moves = [[x + 2, y + 1], [x + 2, y - 1], [x - 2, y + 1], [x - 2, y - 1], [x + 1, y - 2], [x - 1, y + 2], [x + 1, y + 2], [x - 1, y - 2]]
     moves.select! { |move| move[0] < 9 && move[1] < 9 }
+    moves.select! { |move| move[0] > 0 && move[1] > 0 }
     condition = 'nope'
 
     if king.color == 'black'
@@ -847,4 +848,4 @@ end
 
 # game = Game.new
 # game.display_board
-# game.play_turn_white
+# game.play while true
