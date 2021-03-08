@@ -244,7 +244,7 @@ describe Game do
     end         
   end
 
-  describe '#pawn_check', :focus => true do
+  describe '#pawn_check' do
     subject(:game_pawn_check) {described_class.new }
 
     context 'when the pawn checks the black king' do
@@ -425,6 +425,28 @@ describe Game do
         king = game_check.detect_white_king
         output = game_check.check?(king)
         expect(output).to be_truthy
+      end
+    end
+  end
+  
+  describe '#allowed_king_moves', :focus => true do
+    subject(:game_king_moves) { described_class.new }
+
+    context 'when the king is under check' do
+      it 'returns which squares can the king move to' do
+        square_5_1 = game_king_moves.detect_square(5, 1)
+        square_5_1.state = ' '
+        square_5_1.color = ' '
+
+        square_5_5 = game_king_moves.detect_square(5, 5)
+        square_5_5.state = "\u265A"
+        square_5_5.color = 'white'
+
+        game_king_moves.display_board
+
+        king = game_king_moves.detect_white_king
+        output = game_king_moves.allowed_king_moves(king)
+        expect(output.length).to eq(8)
       end
     end
   end

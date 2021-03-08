@@ -776,8 +776,6 @@ class Game
     condition
   end
 
-  # based on player turn: king = detect white or black king
-  # rewrite pawn_check as a single method
   def check?(king)
     if pawn_check(king) == 'check'
       return true
@@ -792,6 +790,25 @@ class Game
     else
       return false
     end
+  end
+
+  def allowed_king_moves(king)
+    x = king.x
+    y = king.y
+    moves = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1], [x + 1, y + 1], [x + 1, y - 1], [x - 1, y - 1], [x -1, y + 1]]
+    moves.select! { |move| move[0] < 9 && move[1] < 9 }
+    moves.select! { |move| move[0] > 0 && move[1] > 0 }
+
+    if king.color == 'white'
+      moves.select! do |move| 
+        detect_piece(move[0], move[1]) == ' ' || detect_color(move[0], move[1]) == 'black'
+      end
+    elsif king.color == 'black'
+      moves.select! do |move| 
+        detect_piece(move[0], move[1]) == ' ' || detect_color(move[0], move[1]) == 'white'
+      end
+    end
+    moves
   end
 
   def enter_x1
@@ -822,7 +839,11 @@ class Game
     y2 = enter_y2 until (1..9).include?(y2)
 
     make_move(x1, y1, x2, y2)
-    puts 'Check' if check?(detect_black_king)
+    if check?(detect_black_king) == true
+      puts "\tcheck"
+    else
+      puts "\tno check"
+    end
 
     display_board
   end
@@ -835,7 +856,11 @@ class Game
     y2 = enter_y2 until (1..9).include?(y2)
 
     make_move(x1, y1, x2, y2)
-    puts 'Check' if check?(detect_white_king)
+    if check?(detect_white_king) == true
+      puts "\tcheck"
+    else
+      puts "\tno check"
+    end
 
     display_board
   end
