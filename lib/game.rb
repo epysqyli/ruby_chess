@@ -908,6 +908,8 @@ class Game
       # select away also those squares that are reached by enemy pieces
       # where the king could otherwise potentially move to
       # need to specify which color these squares would be based on the king color
+      selected_square = detect_square(x, y)
+      selected_square.state = ' '
       unless moves.empty?
         moves.map! do |move|
           square = detect_square(move[0], move[1])
@@ -915,13 +917,17 @@ class Game
           square
         end
         # select away those squares that are under threat, hence reachable by the enemy pieces
+        #moves should also go through the king
         moves.select! { |square| reachable?(square) == false }
+        selected_square.state = "\u265A"
       end
 
     elsif king.color == 'black'
       moves.select! do |move|
         detect_piece(move[0], move[1]) == ' ' || detect_color(move[0], move[1]) == 'white'
       end
+      selected_square = detect_square(x, y)
+      selected_square.state = ' '
       unless moves.empty?
         moves.map! do |move|
           square = detect_square(move[0], move[1])
@@ -929,8 +935,10 @@ class Game
           square
         end
         moves.select! { |square| reachable?(square) == false }
+        selected_square.state = "\u2654"
       end
     end
+
     moves
   end
 
@@ -958,8 +966,8 @@ class Game
     y2 = square.y
 
     threat_path = detect_path(x1, y1, x2, y2)
-    puts "Printing threat path"
-    threat_path.each { |s| p s }
+    # puts "Printing threat path"
+    # threat_path.each { |s| p s }
 
     condition = false
 
@@ -980,22 +988,22 @@ class Game
   # to be properly changed!
   def mate?(king, square)
     sum = 0
-    puts "\nFirst print"
-    p allowed_king_moves(king)
+    # puts "\nFirst print"
+    # p allowed_king_moves(king)
     allowed_king_moves(king).empty? ? sum += 1 : sum += 0
     # allowed_king_moves(king).empty? ? 'mate' : 'nope'
 
-    puts "\nSecond print"
-    p allowed_king_moves(king)
+    # puts "\nSecond print"
+    # p allowed_king_moves(king)
     reachable?(square)? sum += 0 : sum += 1
     # reachable?(square)? 'nope' : 'mate'
 
-    puts "\nThird print"
-    p allowed_king_moves(king)
+    # puts "\nThird print"
+    # p allowed_king_moves(king)
     # breakable?(king, square)? 'nope' : 'mate'
     breakable?(king, square)? sum += 0 : sum += 1
     
-    sum
+    sum == 3 ? true : false
   end
 
   def enter_x1

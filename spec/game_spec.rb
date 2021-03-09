@@ -599,21 +599,35 @@ describe Game do
 
         king = game_mate.detect_black_king
 
-        # puts "\nAllowed King Moves Condition"
-        # one = game_mate.allowed_king_moves(king)
-        # p one
-
-        # puts "\nReachable Condition"
-        # two = game_mate.reachable?(s44)
-        # p two
-
-        # puts "\nBreakable Condition"
-        # # game_mate.detect_square(2, 4).color = ' '
-        # three = game_mate.breakable?(king, s44)
-        # p three
-
         output = game_mate.mate?(king, s44)
-        expect(output).to eq(3)
+        expect(output).to be_truthy
+      end
+    end
+
+    context "when the white king is check mate" do
+      it 'returns true' do
+        s51 = game_mate.detect_square(5, 1)
+        s51.state = ' '
+        s51.color = ' '
+
+        s55 = game_mate.detect_square(5, 5)
+        s55.state = "\u265A"
+        s55.color = 'white'
+
+        s14 = game_mate.detect_square(1, 4)
+        s14.state = "\u2656"
+        s14.color = 'black'
+
+        s15 = game_mate.detect_square(1, 5)
+        s15.state = "\u2656"
+        s15.color = 'black'
+
+        game_mate.display_board
+
+        king = game_mate.detect_white_king
+
+        output = game_mate.mate?(king, s15)
+        expect(output).to be_truthy
       end
     end
   end
