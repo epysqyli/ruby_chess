@@ -1,0 +1,4 @@
+Missing features
+	castling
+	special pawn eating rule
+	move not available if otherwise king gets under check

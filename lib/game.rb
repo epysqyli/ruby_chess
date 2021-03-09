@@ -9,6 +9,7 @@ class Game
 
   def initialize
     @board = ChessBoard.new.board
+    #players not implemented as objects
     @white = Player.new('white')
     @black = Player.new('black')
   end
