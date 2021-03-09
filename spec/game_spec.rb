@@ -547,7 +547,7 @@ describe Game do
     end
   end
 
-  describe '#breakable', :focus => true  do
+  describe '#breakable' do
     subject(:game_breakable) { described_class.new }
 
     context 'when a piece checks the king' do
@@ -570,6 +570,50 @@ describe Game do
 
         output = game_breakable.breakable?(square_3_6, square_5_4)
         expect(output).to be_truthy
+      end
+    end
+  end
+
+  describe "#mate?", :focus => true do
+    subject(:game_mate) { described_class.new }
+
+    context "when the black king is check mate" do
+      it 'returns true' do
+        s58 = game_mate.detect_square(5, 8)
+        s58.state = ' '
+        s58.color = ' '
+
+        s14 = game_mate.detect_square(1, 4)
+        s14.state = "\u2654"
+        s14.color = 'black'
+
+        s45 = game_mate.detect_square(4, 5)
+        s45.state = "\u265C"
+        s45.color = 'white'
+
+        s44 = game_mate.detect_square(4, 4)
+        s44.state = "\u265C"
+        s44.color = 'white'
+
+        game_mate.display_board
+
+        king = game_mate.detect_black_king
+
+        # puts "\nAllowed King Moves Condition"
+        # one = game_mate.allowed_king_moves(king)
+        # p one
+
+        # puts "\nReachable Condition"
+        # two = game_mate.reachable?(s44)
+        # p two
+
+        # puts "\nBreakable Condition"
+        # # game_mate.detect_square(2, 4).color = ' '
+        # three = game_mate.breakable?(king, s44)
+        # p three
+
+        output = game_mate.mate?(king, s44)
+        expect(output).to eq(3)
       end
     end
   end

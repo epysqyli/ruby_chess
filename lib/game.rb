@@ -950,28 +950,52 @@ class Game
     end
   end
 
+  #understand if squares with color and without state need to be cleaned up
   def breakable?(king, square)
-    x1 = square.x
-    y1 = square.y
-    x2 = king.x
-    y2 = king.y
+    x1 = king.x
+    y1 = king.y
+    x2 = square.x
+    y2 = square.y
 
     threat_path = detect_path(x1, y1, x2, y2)
+    puts "Printing threat path"
+    threat_path.each { |s| p s }
 
     condition = false
 
     if threat_path.length > 1 
-      if square.color == 'white'
-        threat_path.map { |square| square.color = 'white' if detect_piece(square.x, square.y) != 'king'}
-        p threat_path
+      if king.color == 'white'
+        threat_path.map { |square| square.color = 'black' }
         condition = true if threat_path.any? { |square| reachable?(square) == true }
-      elsif square.color == 'black'
-        threat_path.map { |square| square.color = 'black'  if detect_piece(square.x, square.y) != 'king'}
+
+      elsif king.color == 'black'
+        threat_path.map { |square| square.color = 'white' }
         condition = true if threat_path.any? { |square| reachable?(square) == true }
       end
     end
 
     condition
+  end
+
+  # to be properly changed!
+  def mate?(king, square)
+    sum = 0
+    puts "\nFirst print"
+    p allowed_king_moves(king)
+    allowed_king_moves(king).empty? ? sum += 1 : sum += 0
+    # allowed_king_moves(king).empty? ? 'mate' : 'nope'
+
+    puts "\nSecond print"
+    p allowed_king_moves(king)
+    reachable?(square)? sum += 0 : sum += 1
+    # reachable?(square)? 'nope' : 'mate'
+
+    puts "\nThird print"
+    p allowed_king_moves(king)
+    # breakable?(king, square)? 'nope' : 'mate'
+    breakable?(king, square)? sum += 0 : sum += 1
+    
+    sum
   end
 
   def enter_x1
