@@ -574,7 +574,7 @@ describe Game do
     end
   end
 
-  describe "#mate?", :focus => true do
+  describe "#mate?" do
     subject(:game_mate) { described_class.new }
 
     context "when the black king is check mate" do
@@ -627,6 +627,25 @@ describe Game do
         king = game_mate.detect_white_king
 
         output = game_mate.mate?(king, s15)
+        expect(output).to be_truthy
+      end
+    end
+
+    context "when the black king is under check mate by the queen" do
+      it 'returns true' do
+        game_mate.make_move(7, 7, 7, 5)
+        game_mate.make_move(6, 7, 6, 6)
+        game_mate.make_move(5, 2, 5, 3)
+        game_mate.make_move(4, 1, 8, 5)
+
+        square = game_mate.detect_square(8, 5) 
+
+        game_mate.display_board
+
+        king = game_mate.detect_black_king
+        p king
+
+        output = game_mate.mate?(king, square)
         expect(output).to be_truthy
       end
     end

@@ -5,6 +5,7 @@ class Game
   attr_accessor :board
 
   @@threat_piece = nil
+  @@game_over = false
 
   def initialize
     @board = ChessBoard.new.board
@@ -713,6 +714,7 @@ class Game
         if free_path?(king.x, king.y, queen.x, queen.y)
           condition = 'check'
           assign_threat(queen)
+
         end
       end
 
@@ -893,6 +895,42 @@ class Game
   # king check section ends
   ##########################
 
+  def pawn_check_reach(square)
+    x = square.x
+    y = square.y
+    condition = 'nope'
+
+    if square.color == 'white'
+      moves = [[x, y + 1]]
+      moves.select! { |move| move[0] < 9 && move[1] < 9 }
+      moves.select! { |move| move[0] > 0 && move[1] > 0 }
+      until condition == 'check' || moves.empty?
+        move = moves.shift
+        x = move[0]
+        y = move[1]
+        if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'black'
+          condition = 'check'
+          assign_threat(detect_square(x, y))
+        end
+      end
+
+    elsif square.color == 'black'
+      moves = [[x, y - 1]]
+      moves.select! { |move| move[0] < 9 && move[1] < 9 }
+      moves.select! { |move| move[0] > 0 && move[1] > 0 }
+      until condition == 'check' || moves.empty?
+        move = moves.shift
+        x = move[0]
+        y = move[1]
+        if detect_piece(x, y) == 'pawn' && detect_color(x, y) == 'white'
+          condition = 'check'
+          assign_threat(detect_square(x, y))
+        end
+      end
+    end
+    condition
+  end
+
   def allowed_king_moves(king)
     x = king.x
     y = king.y
@@ -918,9 +956,9 @@ class Game
         end
         # select away those squares that are under threat, hence reachable by the enemy pieces
         #moves should also go through the king
-        moves.select! { |square| reachable?(square) == false }
-        selected_square.state = "\u265A"
+        moves.select! { |square| check?(square) == false }
       end
+      selected_square.state = "\u265A"
 
     elsif king.color == 'black'
       moves.select! do |move|
@@ -934,16 +972,17 @@ class Game
           square.color = 'black'
           square
         end
-        moves.select! { |square| reachable?(square) == false }
-        selected_square.state = "\u2654"
+        moves.select! { |square| check?(square) == false }
       end
+      selected_square.state = "\u2654"
     end
 
     moves
   end
 
+  # recycles incorrectly king check methods, semantically misleading
   def reachable?(square)
-    if pawn_check(square) == 'check'
+    if pawn_check_reach(square) == 'check'
       true
     elsif rook_check(square) == 'check'
       true
@@ -958,7 +997,7 @@ class Game
     end
   end
 
-  #understand if squares with color and without state need to be cleaned up
+  # do squares with color and without state need to be cleaned up?
   def breakable?(king, square)
     x1 = king.x
     y1 = king.y
@@ -985,23 +1024,17 @@ class Game
     condition
   end
 
-  # to be properly changed!
   def mate?(king, square)
     sum = 0
-    # puts "\nFirst print"
-    # p allowed_king_moves(king)
-    allowed_king_moves(king).empty? ? sum += 1 : sum += 0
-    # allowed_king_moves(king).empty? ? 'mate' : 'nope'
 
-    # puts "\nSecond print"
+    allowed_king_moves(king).empty? ? sum += 1 : sum += 0
     # p allowed_king_moves(king)
     reachable?(square)? sum += 0 : sum += 1
-    # reachable?(square)? 'nope' : 'mate'
-
-    # puts "\nThird print"
-    # p allowed_king_moves(king)
-    # breakable?(king, square)? 'nope' : 'mate'
+    # p reachable?(square)
     breakable?(king, square)? sum += 0 : sum += 1
+    # p breakable?(king, square)
+
+    puts "GAME OVER" if sum == 3
     
     sum == 3 ? true : false
   end
@@ -1036,7 +1069,7 @@ class Game
     make_move(x1, y1, x2, y2)
     if check?(detect_black_king) == true
       puts "\tcheck"
-      p @@threat_piece
+      @@game_over = true if mate?(detect_black_king, get_threat) == true
     else
       puts "\tno check"
     end
@@ -1054,7 +1087,7 @@ class Game
     make_move(x1, y1, x2, y2)
     if check?(detect_white_king) == true
       puts "\tcheck"
-      p @@threat_piece
+      @@game_over = true if mate?(detect_white_king, get_threat) == true
     else
       puts "\tno check"
     end
@@ -1063,11 +1096,15 @@ class Game
   end
 
   def play
-    play_turn_white
-    play_turn_black
+    until @@game_over == true
+      play_turn_white
+      break if @@game_over == true
+      play_turn_black
+      break if @@game_over == true
+    end
   end
 end
 
 # game = Game.new
 # game.display_board
-# game.play while true
+# game.play
